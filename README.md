@@ -24,6 +24,7 @@ Build an analysis + interactive dashboard over the **PostHog/posthog** GitHub re
 3. Analysis.
 4. Interactive dashboard: top 5 + why.
 5. Hosted URL.
+6. Export of the coding-agent session used for the work (`docs/agent-session.md`, via `/export` at the end).
 
 ## Impact definition — candidate signals (pick 4–6, weight them, show the weights)
 
@@ -49,7 +50,7 @@ Anti-signals to exclude or discount: bot accounts, auto-generated/lockfile diffs
 | 10–35 | `scripts/fetch.py`: GraphQL, merged PRs since 2026-06-17 with files, reviews, labels, linked issues → `data/prs.json` |
 | 35–60 | `scripts/analyze.py`: per-author signals, normalize, weighted score → `data/scores.json` |
 | 60–85 | `dashboard/index.html`: single file, Chart.js from CDN, data inlined. Top-5 cards + why, weight sliders, signal breakdown. |
-| 85–90 | Host. Record timer. |
+| 85–90 | Host. Record timer. `/export` session → `docs/agent-session.md`, commit. |
 
 ## Hosting
 
