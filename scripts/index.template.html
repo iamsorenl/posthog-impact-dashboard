@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PostHog Engineering Impact — 90 Days</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0e1117;--card:#161b24;--card2:#1c2230;--line:#262d3d;--tx:#e6edf3;--dim:#8b95a6;
+--lev:#6ea8fe;--bla:#d98cf5;--shi:#5fd48a;--wor:#f5b855;--acc:#ff8f5e}
+body{background:var(--bg);color:var(--tx);font:13px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+padding:14px 18px;max-width:1520px;margin:0 auto}
+a{color:var(--lev);text-decoration:none}a:hover{text-decoration:underline}
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:12px}
+h1{font-size:17px;font-weight:650;letter-spacing:-.2px}
+.sub{color:var(--dim);font-size:11.5px}
+.sub b{color:var(--tx);font-weight:600}
+.btn{margin-left:auto;background:var(--card2);border:1px solid var(--line);color:var(--tx);
+padding:4px 11px;border-radius:6px;cursor:pointer;font-size:11.5px}
+.btn:hover{border-color:var(--dim)}
+.thesis{color:var(--dim);font-size:11.5px;margin:-4px 0 11px;line-height:1.5;max-width:1100px}
+.thesis b{color:var(--tx)}
+.flag{background:#2a1d12;border:1px solid #6b4423;border-left:3px solid var(--acc);border-radius:7px;
+padding:8px 11px;margin:0 0 9px;font-size:11.5px;color:#e8d5c4;line-height:1.5}
+.flag b{color:#ffcba4}.flag code{background:#0a0d13;padding:1px 4px;border-radius:3px}
+.ag{display:inline-block;background:#3a2a1a;color:#ffb380;border-radius:3px;padding:0 4px;font-size:9.5px;
+margin-left:4px;vertical-align:middle;font-weight:600}
+.agbar{font-size:10px;color:var(--dim);margin-top:5px}
+/* top 5 */
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px;cursor:pointer;
+transition:border-color .12s,transform .12s;position:relative}
+.c:hover{border-color:#3d4761;transform:translateY(-1px)}
+.c.on{border-color:var(--acc);background:var(--card2)}
+.chead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.chead img{width:34px;height:34px;border-radius:50%;background:var(--card2);flex:none}
+.rk{position:absolute;top:8px;right:9px;font-size:10px;color:var(--dim);font-weight:700}
+.nm{font-weight:650;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc{font-size:11px;color:var(--dim)}
+.sc b{color:var(--acc);font-size:15px;font-weight:700}
+.bars{display:flex;flex-direction:column;gap:3px}
+.br{display:grid;grid-template-columns:52px 1fr 26px;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+.tr{height:5px;background:#0a0d13;border-radius:3px;overflow:hidden}
+.fl{height:100%;border-radius:3px}
+.hl{font-size:10.5px;color:var(--dim);margin-top:7px;padding-top:6px;border-top:1px solid var(--line);
+line-height:1.4;min-height:29px}
+.hl b{color:var(--tx)}
+/* detail */
+.det{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px;
+display:grid;grid-template-columns:1.15fr 1.35fr 1fr;gap:18px}
+.det h2{font-size:13px;font-weight:650;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.det h2 span{color:var(--dim);font-weight:400;font-size:11px}
+.sec{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--dim);
+margin:0 0 6px;font-weight:650}
+.pil{margin-bottom:9px}
+.pil .top{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px}
+.pil .top b{font-weight:600}
+.pil .why{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.4}
+.pil .why b{color:var(--tx);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:11px}
+td,th{padding:3px 5px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+td.n{text-align:right;color:var(--dim);white-space:nowrap}
+.ttl{display:block;max-width:330px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;direction:rtl;
+text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:230px;display:block}
+.mix{display:flex;height:7px;border-radius:4px;overflow:hidden;margin:4px 0 5px}
+.mix i{display:block}
+.mixk{display:flex;flex-wrap:wrap;gap:3px 9px;font-size:10px;color:var(--dim)}
+.mixk s{width:7px;height:7px;border-radius:2px;display:inline-block;margin-right:3px;text-decoration:none}
+/* leaderboard */
+.lb{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 14px}
+.lbh{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.pg{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dim)}
+.pg button{background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:5px;
+padding:2px 8px;cursor:pointer;font-size:11px}
+.pg button:disabled{opacity:.35;cursor:default}
+.mini{display:inline-block;width:40px;height:4px;background:#0a0d13;border-radius:2px;overflow:hidden;vertical-align:middle}
+.mini i{display:block;height:100%}
+tr.rowsel{cursor:pointer}tr.rowsel:hover td{background:var(--card2)}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;
+max-width:780px;padding:18px 20px;font-size:12px;line-height:1.55}
+dialog::backdrop{background:#000a}
+dialog h3{font-size:14px;margin-bottom:9px}
+dialog h4{font-size:11.5px;margin:12px 0 4px;color:var(--acc)}
+dialog p,dialog li{color:#c3ccd9;margin-bottom:5px}dialog ul{padding-left:18px}
+dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
+@media(max-width:1250px){.cards{grid-template-columns:repeat(3,1fr)}.det{grid-template-columns:1fr 1fr}}
+@media(max-width:780px){.cards{grid-template-columns:1fr}.det{grid-template-columns:1fr}}
+</style></head><body>
+<script type="application/json" id="D">__DATA__</script>
+<header>
+  <h1>Who is having the most impact at PostHog?</h1>
+  <div class="sub" id="meta"></div>
+  <button class="btn" onclick="document.getElementById('m').showModal()">How this is calculated</button>
+</header>
+<div class="flag"><b>Why PR counts are worthless here:</b> <b id="agpct"></b> of merged PRs in this window are
+authored by PostHog's own AI agent (<code>stamphog</code>) and merged under a human's account &mdash; one account merged
+<b>121 in a single day</b>. Any metric built on PR or commit volume is now measuring agent throughput, not engineering.
+Agent-authored PRs are counted and shown, but <b>excluded from the shipping pillar</b>.</div>
+<p class="thesis">So impact here is <b>not</b> commits, lines, or PR count &mdash; all present in the data, all deliberately worth zero.
+It is four things a leader actually cares about: <b style="color:var(--lev)">how many teammates you unblock</b>,
+<b style="color:var(--bla)">whether your work lands on surfaces others depend on</b>,
+<b style="color:var(--shi)">whether what you ship draws real scrutiny</b>, and
+<b style="color:var(--wor)">whether you carry the unglamorous fix/perf load</b>.
+Each score is a cohort percentile that opens into the PRs behind it &mdash; this is <b>evidence to check, not a verdict</b>.
+<a href="#" onclick="document.getElementById('m').showModal();return false">What it cannot see &rarr;</a></p>
+<div class="cards" id="cards"></div>
+<div class="det" id="det"></div>
+<div class="lb">
+  <div class="lbh"><div class="sec" style="margin:0">All eligible contributors</div>
+    <div class="pg"><span id="pgi"></span>
+      <button id="pv">&larr;</button><button id="nx">&rarr;</button></div></div>
+  <table><thead><tr><th style="width:38px">#</th><th>Engineer</th><th style="width:58px">Score</th>
+  <th>Leverage</th><th>Blast radius</th><th>Shipping</th><th>Work mix</th>
+  <th class="n">Merged</th><th class="n">Reviews</th><th class="n">Unblocked</th></tr></thead>
+  <tbody id="lbb"></tbody></table>
+</div>
+
+<dialog id="m"><h3>Methodology &mdash; and what it deliberately ignores</h3>
+<p><b>Data:</b> every merged pull request in <code>PostHog/posthog</code> over the 90 days
+<span id="mw"></span>, pulled from the GitHub GraphQL API one day at a time (so nothing is lost to the
+API's 1,000-result search cap), joined to the repo's git history for file-level data. Bot and automation
+accounts are excluded from every figure.</p>
+<h4>Why not commits, lines or PR count?</h4>
+<p>All three reward volume and punish the senior engineer who spends the morning in review, or who
+lands 40 lines in the query engine that unblock five teams. They are in the dataset for reference,
+but contribute <b>zero</b> to the score.</p>
+<h4>The four pillars</h4>
+<ul>
+<li><b style="color:var(--lev)">Review leverage (35%)</b> &mdash; the count of <i>distinct</i> engineers whose PRs you
+reviewed (60%) and your number of substantive reviews (40%). Substantive means
+<code>CHANGES_REQUESTED</code> or <code>COMMENTED</code>; a bare approval is a rubber stamp and scores nothing.
+Distinct people, not review count, so reviewing one teammate 50 times does not look like reviewing 50 teammates.</li>
+<li><b style="color:var(--bla)">Blast radius (25%)</b> &mdash; does your code land where others work? Half is the number of
+<i>shared-surface</i> files you touched (files <span id="mc"></span>+ distinct engineers also touched in the window);
+half is the count of distinct engineers who touch the same files as you. A big diff in an isolated corner
+scores near zero; a small diff in a hot path scores high.</li>
+<li><b style="color:var(--shi)">Consequential shipping (25%)</b> &mdash; your merged work weighted by the
+<i>attention it attracted</i>, not its size. Attention = distinct reviewers + 0.5&times;inline review threads
++ 0.25&times;comments. This uses the org's own scrutiny as the signal of consequence: a 2,000-line PR nobody
+read scores below a 20-line PR that five engineers argued over.</li>
+<li><b style="color:var(--wor)">Work mix &amp; load (15%)</b> &mdash; share of your PRs that are fixes or performance
+work (60%) plus the breadth of work types you cover (40%). Credits the person keeping production healthy,
+which feature-count metrics systematically miss.</li>
+</ul>
+<h4>Scoring</h4>
+<p>Each sub-metric is converted to a <b>percentile within this 90-day cohort</b>, so "78" means
+"higher than 78% of eligible contributors on that dimension" &mdash; not an arbitrary point total.
+Pillars combine 35/25/25/15 into the final score. Click any engineer to see the raw counts and the
+actual PRs behind every number.</p>
+<h4>Honest limitations</h4>
+<ul>
+<li><b>Glue work is invisible.</b> Incident response, the support-hero rotation, design review, RFCs, mentoring and unblocking in Slack produce no PRs. Tanya Reilly's <i>Being Glue</i> describes exactly the contributor this dashboard cannot see.</li>
+<li><b>Long-cycle work is penalised.</b> Eight weeks rewriting a query planner lands as one or two PRs and scores near the floor.</li>
+<li><b>Greenfield is penalised.</b> Blast radius rewards crowded files, so an engineer alone in a new product area scores low by construction &mdash; and a well-factored isolated module looks like low impact when it is good design.</li>
+<li><b>Attention rewards contentiousness.</b> A PR with 40 comments may be badly designed rather than important; per-PR attention is capped at <span id="mcap"></span> to blunt this, but the bias remains.</li>
+<li><b>New hires</b> are structurally disadvantaged by percentile scoring over a fixed 90-day window.</li>
+<li>Research (SPACE, Forsgren et al. 2021; DORA; Deming) is consistent that individual ranking on delivery telemetry is unsound &mdash; these frameworks are deliberately scoped to teams and systems. Treat this as a prompt for conversation, not a performance rating.</li>
+<li>Blast radius uses 90-day co-editing as a proxy for architectural centrality, not real dependency analysis.</li>
+<li>Scores are relative to this repo and this window, so they compare contributors to each other, not to an absolute bar.</li>
+<li>Eligibility floor (<span id="me"></span>) keeps one-off contributors from distorting the percentile base.</li>
+</ul>
+<p style="margin-top:12px"><button class="btn" style="margin:0" onclick="document.getElementById('m').close()">Close</button></p>
+</dialog>
+
+<script>
+const D=JSON.parse(document.getElementById('D').textContent),M=D.meta,EN=D.engineers;
+const PL=[['leverage','Leverage','lev'],['blast','Blast radius','bla'],['shipping','Shipping','shi'],['workmix','Work mix','wor']];
+const MIXC={feat:'#5fd48a',fix:'#f5b855',perf:'#6ea8fe',infra:'#d98cf5',refactor:'#8b95a6',
+test:'#4fc3c3',docs:'#6b7689',revert:'#ff6b6b',other:'#3d4761'};
+const f=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
+const pctf=v=>v.toFixed(0);
+
+document.getElementById('meta').innerHTML=
+ `<b>${M.window[0]}</b> to <b>${M.window[1]}</b> &middot; <b>${f(M.merged_prs)}</b> merged PRs &middot; `+
+ `<b>${f(M.human_prs)}</b> by humans &middot; <b>${f(M.git_commits)}</b> commits across <b>${f(M.files_tracked)}</b> files &middot; `+
+ `<b>${M.contributors_eligible}</b> eligible of ${M.contributors_total} contributors`;
+document.getElementById('agpct').textContent=Math.round(100*M.agent_labelled_prs/M.merged_prs)+'% ('+f(M.agent_labelled_prs)+' of '+f(M.merged_prs)+')';
+document.getElementById('mw').textContent=M.window[0]+' to '+M.window[1];
+document.getElementById('mc').textContent=M.core_file_min_authors;
+document.getElementById('me').textContent=M.eligibility;
+var mc=document.getElementById('mcap');if(mc)mc.textContent=M.attention_cap;
+
+// headline: the single most distinctive thing about this engineer
+function headline(e){
+ const r=e.raw,p=e.pillars,best=PL.slice().sort((a,b)=>p[b[0]]-p[a[0]])[0][0];
+ if(best==='leverage')return `Unblocked <b>${r.distinct_helped}</b> different engineers with <b>${f(r.substantive_reviews)}</b> substantive reviews`;
+ if(best==='blast')return `Works in <b>${f(r.core_files)}</b> shared files, overlapping <b>${r.co_engineers}</b> other engineers`;
+ if(best==='shipping')return `<b>${r.high_attention_prs}</b> PRs drew top-decile review scrutiny across <b>${r.merged}</b> merged`;
+ return `<b>${Math.round(r.fixperf_share*100)}%</b> of ${r.merged} PRs are fixes or perf work, across <b>${r.type_breadth}</b> work types`;
+}
+function why(e,k){const r=e.raw;
+ if(k==='leverage')return `<b>${r.distinct_helped}</b> distinct engineers reviewed &middot; <b>${f(r.substantive_reviews)}</b> substantive of ${f(r.reviews_given)} reviews`;
+ if(k==='blast')return `<b>${f(r.core_files)}</b> shared-surface files of ${f(r.files_touched)} touched &middot; overlaps <b>${r.co_engineers}</b> engineers`;
+ if(k==='shipping')return `<b>${f(r.attention_sum)}</b> attention over <b>${r.human_prs}</b> human-authored PRs &middot; <b>${r.high_attention_prs}</b> top-decile &middot; ${r.agent_prs} agent PRs excluded`;
+ return `<b>${Math.round(r.fixperf_share*100)}%</b> fix/perf &middot; <b>${r.type_breadth}</b> distinct work types`;
+}
+
+let sel=0;
+document.getElementById('cards').innerHTML=EN.slice(0,5).map((e,i)=>`
+ <div class="c${i===sel?' on':''}" data-i="${i}">
+  <div class="rk">#${i+1}</div>
+  <div class="chead"><img loading="lazy" src="https://github.com/${e.login}.png?size=68" alt="">
+   <div style="min-width:0"><div class="nm">${e.login}</div>
+   <div class="sc"><b>${pctf(e.score)}</b> impact</div></div></div>
+  <div class="bars">${PL.map(([k,l,c])=>`<div class="br"><span>${l}</span>
+   <span class="tr"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
+   <span style="text-align:right">${pctf(e.pillars[k])}</span></div>`).join('')}</div>
+  <div class="hl">${headline(e)}</div>
+  <div class="agbar">${e.raw.human_prs} human PRs &middot; ${e.raw.agent_prs} agent-authored (${Math.round(e.raw.agent_share*100)}%)</div></div>`).join('');
+
+function detail(i){
+ const e=EN[i];if(!e)return;
+ const tot=Object.values(e.mix).reduce((a,b)=>a+b,0)||1;
+ const mix=Object.entries(e.mix).sort((a,b)=>b[1]-a[1]);
+ document.getElementById('det').innerHTML=`
+ <div><h2><img src="https://github.com/${e.login}.png?size=44" style="width:22px;height:22px;border-radius:50%">
+   <a href="https://github.com/${e.login}" target="_blank" rel="noopener">${e.login}</a>
+   <span>rank #${EN.indexOf(e)+1} &middot; score ${pctf(e.score)} &middot; active ${e.active[0]} &rarr; ${e.active[1]}</span></h2>
+  ${PL.map(([k,l,c])=>`<div class="pil"><div class="top"><b style="color:var(--${c})">${l}</b>
+    <span>${pctf(e.pillars[k])}<span style="color:var(--dim);font-size:10px">th pct</span></span></div>
+    <span class="tr" style="display:block"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
+    <div class="why">${why(e,k)}</div></div>`).join('')}
+  <div class="sec" style="margin-top:11px">Work mix &middot; ${tot} merged PRs</div>
+  <div class="mix">${mix.map(([k,v])=>`<i style="width:${100*v/tot}%;background:${MIXC[k]||'#3d4761'}"></i>`).join('')}</div>
+  <div class="mixk">${mix.map(([k,v])=>`<span><s style="background:${MIXC[k]||'#3d4761'}"></s>${k} ${v}</span>`).join('')}</div>
+ </div>
+ <div><div class="sec">Highest-scrutiny PRs &mdash; the evidence</div>
+  <table><thead><tr><th>PR</th><th>Reviewers</th><th class="n">Threads</th><th class="n">Attention</th></tr></thead><tbody>
+  ${e.top_prs.map(p=>`<tr><td><a class="ttl" href="https://github.com/PostHog/posthog/pull/${p.n}" target="_blank" rel="noopener" title="${p.t.replace(/"/g,'&quot;')}">#${p.n} ${p.t}</a>${p.ag?'<span class="ag">agent</span>':''}</td>
+   <td class="n" style="text-align:left">${p.r}</td><td class="n">${p.th}</td><td class="n">${p.a}</td></tr>`).join('')||'<tr><td colspan=4 style="color:var(--dim)">No merged PRs in window &mdash; scores here come from review leverage.</td></tr>'}
+  </tbody></table></div>
+ <div><div class="sec">Engineers they unblocked</div>
+  <table><tbody>${e.reviewed.map(r=>`<tr><td><a href="https://github.com/${r.who}" target="_blank" rel="noopener">${r.who}</a></td><td class="n">${r.n} reviews</td></tr>`).join('')||'<tr><td style="color:var(--dim)">&mdash;</td></tr>'}</tbody></table>
+  <div class="sec" style="margin-top:11px">Shared surfaces they touch</div>
+  <table><tbody>${e.top_files.map(x=>`<tr><td><span class="fp" title="${x.f}">${x.f}</span></td><td class="n">${x.c} eng</td></tr>`).join('')||'<tr><td style="color:var(--dim)">&mdash;</td></tr>'}</tbody></table></div>`;
+}
+function pick(i){sel=i;document.querySelectorAll('.c').forEach(c=>c.classList.toggle('on',+c.dataset.i===i));detail(i);}
+document.getElementById('cards').addEventListener('click',ev=>{const c=ev.target.closest('.c');if(c)pick(+c.dataset.i);});
+
+// paginated leaderboard over the full inlined cohort
+const PER=12;let pg=0;const pages=Math.ceil(EN.length/PER);
+function draw(){
+ const s=pg*PER;
+ document.getElementById('lbb').innerHTML=EN.slice(s,s+PER).map((e,j)=>`
+  <tr class="rowsel" data-i="${s+j}"><td class="n">${s+j+1}</td>
+  <td><a href="https://github.com/${e.login}" target="_blank" rel="noopener">${e.login}</a></td>
+  <td><b style="color:var(--acc)">${pctf(e.score)}</b></td>
+  ${PL.map(([k,l,c])=>`<td><span class="mini"><i style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
+   <span style="color:var(--dim);font-size:10px;margin-left:4px">${pctf(e.pillars[k])}</span></td>`).join('')}
+  <td class="n">${e.raw.merged}</td><td class="n">${f(e.raw.reviews_given)}</td><td class="n">${e.raw.distinct_helped}</td></tr>`).join('');
+ document.getElementById('pgi').textContent=`${s+1}–${Math.min(s+PER,EN.length)} of ${EN.length}`;
+ document.getElementById('pv').disabled=pg===0;document.getElementById('nx').disabled=pg>=pages-1;
+}
+document.getElementById('pv').onclick=()=>{if(pg>0){pg--;draw();}};
+document.getElementById('nx').onclick=()=>{if(pg<pages-1){pg++;draw();}};
+document.getElementById('lbb').addEventListener('click',ev=>{const r=ev.target.closest('tr.rowsel');
+ if(r&&!ev.target.closest('a')){const i=+r.dataset.i;if(i<5)pick(i);else detail(i);
+ document.getElementById('det').scrollIntoView({behavior:'smooth',block:'nearest'});}});
+detail(0);draw();
+</script></body></html>
