@@ -1,0 +1,435 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - heading "Who is having the most impact at PostHog?" [level=1] [ref=e3]
+    - generic [ref=e4]: 2026-06-18 to 2026-09-16 · 15.2k merged PRs · 13.7k by humans · 14.8k commits across 45.9k files · 166 eligible of 239 contributors
+    - button "How this is calculated" [ref=e5] [cursor=pointer]
+  - generic [ref=e6]:
+    - text: "Why PR counts are worthless here: 39% (6.0k of 15.2k) of merged PRs in this window are authored by PostHog's own AI agent ("
+    - code [ref=e7]: stamphog
+    - text: ) and merged under a human's account — one account merged 121 in a single day. Any metric built on PR or commit volume is now measuring agent throughput, not engineering. Agent-authored PRs are counted and shown, but excluded from the shipping pillar.
+  - paragraph [ref=e8]:
+    - text: "So impact here is not commits, lines, or PR count — all present in the data, all deliberately worth zero. It is four things a leader actually cares about: how many teammates you unblock, whether your work lands on surfaces others depend on, whether what you ship draws real scrutiny, and whether you carry the unglamorous fix/perf load. Each score is a cohort percentile that opens into the PRs behind it — this is evidence to check, not a verdict."
+    - link "What it cannot see →" [ref=e9] [cursor=pointer]:
+      - /url: "#"
+  - generic [ref=e10]:
+    - generic [ref=e11] [cursor=pointer]:
+      - generic [ref=e12]: "#1"
+      - generic [ref=e14]:
+        - generic [ref=e15]: Gilbert09
+        - generic [ref=e16]: 91 impact
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e19]: Leverage
+          - generic [ref=e21]: "82"
+        - generic [ref=e22]:
+          - generic [ref=e23]: Blast radius
+          - generic [ref=e25]: "99"
+        - generic [ref=e26]:
+          - generic [ref=e27]: Shipping
+          - generic [ref=e29]: "100"
+        - generic [ref=e30]:
+          - generic [ref=e31]: Work mix
+          - generic [ref=e33]: "82"
+      - generic [ref=e34]: 98 PRs drew top-decile review scrutiny across 2414 merged
+      - generic [ref=e35]: 966 human PRs · 1448 agent-authored (60%)
+    - generic [ref=e36] [cursor=pointer]:
+      - generic [ref=e37]: "#2"
+      - generic [ref=e39]:
+        - generic [ref=e40]: webjunkie
+        - generic [ref=e41]: 91 impact
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - generic [ref=e44]: Leverage
+          - generic [ref=e46]: "90"
+        - generic [ref=e47]:
+          - generic [ref=e48]: Blast radius
+          - generic [ref=e50]: "100"
+        - generic [ref=e51]:
+          - generic [ref=e52]: Shipping
+          - generic [ref=e54]: "99"
+        - generic [ref=e55]:
+          - generic [ref=e56]: Work mix
+          - generic [ref=e58]: "61"
+      - generic [ref=e59]: Works in 516 shared files, overlapping 172 other engineers
+      - generic [ref=e60]: 210 human PRs · 110 agent-authored (34%)
+    - generic [ref=e61] [cursor=pointer]:
+      - generic [ref=e62]: "#3"
+      - generic [ref=e64]:
+        - generic [ref=e65]: pauldambra
+        - generic [ref=e66]: 91 impact
+      - generic [ref=e67]:
+        - generic [ref=e68]:
+          - generic [ref=e69]: Leverage
+          - generic [ref=e71]: "91"
+        - generic [ref=e72]:
+          - generic [ref=e73]: Blast radius
+          - generic [ref=e75]: "99"
+        - generic [ref=e76]:
+          - generic [ref=e77]: Shipping
+          - generic [ref=e79]: "99"
+        - generic [ref=e80]:
+          - generic [ref=e81]: Work mix
+          - generic [ref=e83]: "64"
+      - generic [ref=e84]: Works in 471 shared files, overlapping 171 other engineers
+      - generic [ref=e85]: 165 human PRs · 312 agent-authored (65%)
+    - generic [ref=e86] [cursor=pointer]:
+      - generic [ref=e87]: "#4"
+      - generic [ref=e89]:
+        - generic [ref=e90]: andrewm4894
+        - generic [ref=e91]: 90 impact
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - generic [ref=e94]: Leverage
+          - generic [ref=e96]: "95"
+        - generic [ref=e97]:
+          - generic [ref=e98]: Blast radius
+          - generic [ref=e100]: "96"
+        - generic [ref=e101]:
+          - generic [ref=e102]: Shipping
+          - generic [ref=e104]: "99"
+        - generic [ref=e105]:
+          - generic [ref=e106]: Work mix
+          - generic [ref=e108]: "52"
+      - generic [ref=e109]: 63 PRs drew top-decile review scrutiny across 326 merged
+      - generic [ref=e110]: 106 human PRs · 220 agent-authored (67%)
+    - generic [ref=e111] [cursor=pointer]:
+      - generic [ref=e112]: "#5"
+      - generic [ref=e114]:
+        - generic [ref=e115]: skoob13
+        - generic [ref=e116]: 89 impact
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]: Leverage
+          - generic [ref=e121]: "88"
+        - generic [ref=e122]:
+          - generic [ref=e123]: Blast radius
+          - generic [ref=e125]: "93"
+        - generic [ref=e126]:
+          - generic [ref=e127]: Shipping
+          - generic [ref=e129]: "96"
+        - generic [ref=e130]:
+          - generic [ref=e131]: Work mix
+          - generic [ref=e133]: "73"
+      - generic [ref=e134]: 28 PRs drew top-decile review scrutiny across 217 merged
+      - generic [ref=e135]: 146 human PRs · 71 agent-authored (33%)
+  - generic [ref=e136]:
+    - generic [ref=e137]:
+      - 'heading "Gilbert09 rank #1 · score 91 · active 2026-06-18 → 2026-09-16" [level=2] [ref=e138]':
+        - link "Gilbert09" [ref=e140] [cursor=pointer]:
+          - /url: https://github.com/Gilbert09
+        - generic [ref=e141]: "rank #1 · score 91 · active 2026-06-18 → 2026-09-16"
+      - generic [ref=e142]:
+        - generic [ref=e143]:
+          - generic [ref=e144]: Leverage
+          - generic [ref=e145]: 82th pct
+        - generic [ref=e147]: 60 distinct engineers reviewed · 8 substantive of 396 reviews
+      - generic [ref=e148]:
+        - generic [ref=e149]:
+          - generic [ref=e150]: Blast radius
+          - generic [ref=e151]: 99th pct
+        - generic [ref=e153]: 476 shared-surface files of 10.3k touched · overlaps 169 engineers
+      - generic [ref=e154]:
+        - generic [ref=e155]:
+          - generic [ref=e156]: Shipping
+          - generic [ref=e157]: 100th pct
+        - generic [ref=e159]: 4.7k attention over 966 human-authored PRs · 98 top-decile · 1448 agent PRs excluded
+      - generic [ref=e160]:
+        - generic [ref=e161]:
+          - generic [ref=e162]: Work mix
+          - generic [ref=e163]: 82th pct
+        - generic [ref=e165]: 54% fix/perf · 8 distinct work types
+      - generic [ref=e166]: Work mix · 2414 merged PRs
+      - generic [ref=e177]:
+        - generic [ref=e178]: fix 1290
+        - generic [ref=e180]: feat 1030
+        - generic [ref=e182]: infra 34
+        - generic [ref=e184]: other 28
+        - generic [ref=e186]: docs 12
+        - generic [ref=e188]: test 7
+        - generic [ref=e190]: perf 7
+        - generic [ref=e192]: refactor 5
+        - generic [ref=e194]: revert 1
+    - generic [ref=e196]:
+      - generic [ref=e197]: Highest-scrutiny PRs — the evidence
+      - table [ref=e198]:
+        - rowgroup [ref=e199]:
+          - row [ref=e200]:
+            - columnheader "PR" [ref=e201]
+            - columnheader "Reviewers" [ref=e202]
+            - columnheader "Threads" [ref=e203]
+            - columnheader "Attention" [ref=e204]
+        - rowgroup [ref=e205]:
+          - row [ref=e206]:
+            - cell [ref=e207]:
+              - 'link "#63592 feat(data-warehouse): add semantic context layer for warehouse tables" [ref=e208] [cursor=pointer]':
+                - /url: https://github.com/PostHog/posthog/pull/63592
+            - cell "4" [ref=e209]
+            - cell "22" [ref=e210]
+            - cell "15" [ref=e211]
+          - row [ref=e212]:
+            - cell [ref=e213]:
+              - 'link "#59468 feat(data-warehouse): add data warehouse table trigger for workflows" [ref=e214] [cursor=pointer]':
+                - /url: https://github.com/PostHog/posthog/pull/59468
+            - cell "4" [ref=e215]
+            - cell "24" [ref=e216]
+            - cell "15" [ref=e217]
+          - row [ref=e218]:
+            - cell [ref=e219]:
+              - 'link "#70039 feat(data-warehouse): throttling consumer for person-property updates" [ref=e220] [cursor=pointer]':
+                - /url: https://github.com/PostHog/posthog/pull/70039
+            - cell "4" [ref=e221]
+            - cell "18" [ref=e222]
+            - cell "15" [ref=e223]
+          - row [ref=e224]:
+            - cell [ref=e225]:
+              - 'link "#71168 feat(data-warehouse): implement flagsmith import source" [ref=e226] [cursor=pointer]':
+                - /url: https://github.com/PostHog/posthog/pull/71168
+            - cell "3" [ref=e227]
+            - cell "17" [ref=e228]
+            - cell "15" [ref=e229]
+          - row [ref=e230]:
+            - cell [ref=e231]:
+              - 'link "#72843 feat(data-warehouse): add person-property sync management + backfill" [ref=e232] [cursor=pointer]':
+                - /url: https://github.com/PostHog/posthog/pull/72843
+            - cell "4" [ref=e233]
+            - cell "43" [ref=e234]
+            - cell "15" [ref=e235]
+          - row [ref=e236]:
+            - cell [ref=e237]:
+              - 'link "#79462 feat(integrations): add integration-service for platform secrets" [ref=e238] [cursor=pointer]':
+                - /url: https://github.com/PostHog/posthog/pull/79462
+            - cell "5" [ref=e239]
+            - cell "41" [ref=e240]
+            - cell "15" [ref=e241]
+    - generic [ref=e242]:
+      - generic [ref=e243]: Engineers they unblocked
+      - table [ref=e244]:
+        - rowgroup [ref=e245]:
+          - row [ref=e246]:
+            - cell [ref=e247]:
+              - link "estefaniarabadan" [ref=e248] [cursor=pointer]:
+                - /url: https://github.com/estefaniarabadan
+            - cell "76 reviews" [ref=e249]
+          - row [ref=e250]:
+            - cell [ref=e251]:
+              - link "danielcarletti" [ref=e252] [cursor=pointer]:
+                - /url: https://github.com/danielcarletti
+            - cell "68 reviews" [ref=e253]
+          - row [ref=e254]:
+            - cell [ref=e255]:
+              - link "jakesciotto" [ref=e256] [cursor=pointer]:
+                - /url: https://github.com/jakesciotto
+            - cell "56 reviews" [ref=e257]
+          - row [ref=e258]:
+            - cell [ref=e259]:
+              - link "webjunkie" [ref=e260] [cursor=pointer]:
+                - /url: https://github.com/webjunkie
+            - cell "16 reviews" [ref=e261]
+          - row [ref=e262]:
+            - cell [ref=e263]:
+              - link "thiagosalvatore" [ref=e264] [cursor=pointer]:
+                - /url: https://github.com/thiagosalvatore
+            - cell "16 reviews" [ref=e265]
+          - row [ref=e266]:
+            - cell [ref=e267]:
+              - link "luke-belton" [ref=e268] [cursor=pointer]:
+                - /url: https://github.com/luke-belton
+            - cell "14 reviews" [ref=e269]
+      - generic [ref=e270]: Shared surfaces they touch
+      - table [ref=e271]:
+        - rowgroup [ref=e272]:
+          - row [ref=e273]:
+            - cell "services/mcp/src/api/generated.ts" [ref=e274]
+            - cell "125 eng" [ref=e276]
+          - row [ref=e277]:
+            - cell "frontend/snapshots.yml" [ref=e278]
+            - cell "104 eng" [ref=e280]
+          - row [ref=e281]:
+            - cell "services/mcp/schema/tool-definitions-all.json" [ref=e282]
+            - cell "87 eng" [ref=e284]
+          - row [ref=e285]:
+            - cell "services/mcp/schema/generated-tool-definitions.json" [ref=e286]
+            - cell "84 eng" [ref=e288]
+          - row [ref=e289]:
+            - cell "frontend/src/types.ts" [ref=e290]
+            - cell "75 eng" [ref=e292]
+          - row [ref=e293]:
+            - cell "frontend/src/lib/constants.tsx" [ref=e294]
+            - cell "72 eng" [ref=e296]
+  - generic [ref=e297]:
+    - generic [ref=e298]:
+      - generic [ref=e299]: All eligible contributors
+      - generic [ref=e300]:
+        - generic [ref=e301]: 1–12 of 150
+        - button "←" [disabled] [ref=e302]
+        - button "→" [ref=e303] [cursor=pointer]
+    - table [ref=e304]:
+      - rowgroup [ref=e305]:
+        - row [ref=e306]:
+          - columnheader "#" [ref=e307]
+          - columnheader "Engineer" [ref=e308]
+          - columnheader "Score" [ref=e309]
+          - columnheader "Leverage" [ref=e310]
+          - columnheader "Blast radius" [ref=e311]
+          - columnheader "Shipping" [ref=e312]
+          - columnheader "Work mix" [ref=e313]
+          - columnheader "Merged" [ref=e314]
+          - columnheader "Reviews" [ref=e315]
+          - columnheader "Unblocked" [ref=e316]
+      - rowgroup [ref=e317]:
+        - row [ref=e318] [cursor=pointer]:
+          - cell "1" [ref=e319]
+          - cell [ref=e320]:
+            - link "Gilbert09" [ref=e321]:
+              - /url: https://github.com/Gilbert09
+          - cell "91" [ref=e322]
+          - cell [ref=e323]
+          - cell [ref=e326]
+          - cell [ref=e329]
+          - cell [ref=e332]
+          - cell "2414" [ref=e335]
+          - cell "396" [ref=e336]
+          - cell "60" [ref=e337]
+        - row [ref=e338] [cursor=pointer]:
+          - cell "2" [ref=e339]
+          - cell [ref=e340]:
+            - link "webjunkie" [ref=e341]:
+              - /url: https://github.com/webjunkie
+          - cell "91" [ref=e342]
+          - cell [ref=e343]
+          - cell [ref=e346]
+          - cell [ref=e349]
+          - cell [ref=e352]
+          - cell "320" [ref=e355]
+          - cell "260" [ref=e356]
+          - cell "37" [ref=e357]
+        - row [ref=e358] [cursor=pointer]:
+          - cell "3" [ref=e359]
+          - cell [ref=e360]:
+            - link "pauldambra" [ref=e361]:
+              - /url: https://github.com/pauldambra
+          - cell "91" [ref=e362]
+          - cell [ref=e363]
+          - cell [ref=e366]
+          - cell [ref=e369]
+          - cell [ref=e372]
+          - cell "477" [ref=e375]
+          - cell "150" [ref=e376]
+          - cell "40" [ref=e377]
+        - row [ref=e378] [cursor=pointer]:
+          - cell "4" [ref=e379]
+          - cell [ref=e380]:
+            - link "andrewm4894" [ref=e381]:
+              - /url: https://github.com/andrewm4894
+          - cell "90" [ref=e382]
+          - cell [ref=e383]
+          - cell [ref=e386]
+          - cell [ref=e389]
+          - cell [ref=e392]
+          - cell "326" [ref=e395]
+          - cell "383" [ref=e396]
+          - cell "51" [ref=e397]
+        - row [ref=e398] [cursor=pointer]:
+          - cell "5" [ref=e399]
+          - cell [ref=e400]:
+            - link "skoob13" [ref=e401]:
+              - /url: https://github.com/skoob13
+          - cell "89" [ref=e402]
+          - cell [ref=e403]
+          - cell [ref=e406]
+          - cell [ref=e409]
+          - cell [ref=e412]
+          - cell "217" [ref=e415]
+          - cell "259" [ref=e416]
+          - cell "41" [ref=e417]
+        - row [ref=e418] [cursor=pointer]:
+          - cell "6" [ref=e419]
+          - cell [ref=e420]:
+            - link "tatoalo" [ref=e421]:
+              - /url: https://github.com/tatoalo
+          - cell "88" [ref=e422]
+          - cell [ref=e423]
+          - cell [ref=e426]
+          - cell [ref=e429]
+          - cell [ref=e432]
+          - cell "290" [ref=e435]
+          - cell "268" [ref=e436]
+          - cell "33" [ref=e437]
+        - row [ref=e438] [cursor=pointer]:
+          - cell "7" [ref=e439]
+          - cell [ref=e440]:
+            - link "haacked" [ref=e441]:
+              - /url: https://github.com/haacked
+          - cell "88" [ref=e442]
+          - cell [ref=e443]
+          - cell [ref=e446]
+          - cell [ref=e449]
+          - cell [ref=e452]
+          - cell "125" [ref=e455]
+          - cell "251" [ref=e456]
+          - cell "40" [ref=e457]
+        - row [ref=e458] [cursor=pointer]:
+          - cell "8" [ref=e459]
+          - cell [ref=e460]:
+            - link "rafaeelaudibert" [ref=e461]:
+              - /url: https://github.com/rafaeelaudibert
+          - cell "87" [ref=e462]
+          - cell [ref=e463]
+          - cell [ref=e466]
+          - cell [ref=e469]
+          - cell [ref=e472]
+          - cell "188" [ref=e475]
+          - cell "220" [ref=e476]
+          - cell "44" [ref=e477]
+        - row [ref=e478] [cursor=pointer]:
+          - cell "9" [ref=e479]
+          - cell [ref=e480]:
+            - link "mayteio" [ref=e481]:
+              - /url: https://github.com/mayteio
+          - cell "85" [ref=e482]
+          - cell [ref=e483]
+          - cell [ref=e486]
+          - cell [ref=e489]
+          - cell [ref=e492]
+          - cell "152" [ref=e495]
+          - cell "270" [ref=e496]
+          - cell "47" [ref=e497]
+        - row [ref=e498] [cursor=pointer]:
+          - cell "10" [ref=e499]
+          - cell [ref=e500]:
+            - link "rnegron" [ref=e501]:
+              - /url: https://github.com/rnegron
+          - cell "82" [ref=e502]
+          - cell [ref=e503]
+          - cell [ref=e506]
+          - cell [ref=e509]
+          - cell [ref=e512]
+          - cell "276" [ref=e515]
+          - cell "300" [ref=e516]
+          - cell "44" [ref=e517]
+        - row [ref=e518] [cursor=pointer]:
+          - cell "11" [ref=e519]
+          - cell [ref=e520]:
+            - link "sakce" [ref=e521]:
+              - /url: https://github.com/sakce
+          - cell "82" [ref=e522]
+          - cell [ref=e523]
+          - cell [ref=e526]
+          - cell [ref=e529]
+          - cell [ref=e532]
+          - cell "179" [ref=e535]
+          - cell "128" [ref=e536]
+          - cell "23" [ref=e537]
+        - row [ref=e538] [cursor=pointer]:
+          - cell "12" [ref=e539]
+          - cell [ref=e540]:
+            - link "sampennington" [ref=e541]:
+              - /url: https://github.com/sampennington
+          - cell "82" [ref=e542]
+          - cell [ref=e543]
+          - cell [ref=e546]
+          - cell [ref=e549]
+          - cell [ref=e552]
+          - cell "266" [ref=e555]
+          - cell "142" [ref=e556]
+          - cell "35" [ref=e557]

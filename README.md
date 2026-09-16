@@ -5,7 +5,7 @@ Live dashboard: see repo Pages URL.
 **Question:** who are the most impactful engineers at PostHog, and how would you check?
 
 ## Data
-Every merged PR in `PostHog/posthog` for 2026-06-17 → 2026-09-16 — **15,162 PRs**, fetched from the
+Every merged PR in `PostHog/posthog` for 2026-06-18 → 2026-09-16 — **15,162 PRs**, fetched from the
 GitHub GraphQL API **one day at a time** so nothing is lost to the API's 1,000-result search cap.
 Completeness is asserted per day (`expected == fetched`); all 91 days matched with zero mismatches.
 File-level data comes from a treeless clone of the repo (`git log --name-only`): **14,831 commits,
