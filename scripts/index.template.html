@@ -121,9 +121,11 @@ dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
   <button class="btn" onclick="openM()">How this is calculated</button>
 </header>
 <div class="sys" id="sys"></div>
-<div class="flag"><b>Why volume metrics fail here:</b> <b id="agpct"></b> of merged PRs were approved by an AI reviewer
-instead of a full human review (the <code>stamphog</code> label), and five of the seven busiest reviewers are bots &mdash; <code>stamphog</code>
-alone left 8,460 reviews. So commits, lines, PR count and review count are all in the data and all score <b>zero</b>.</div>
+<div class="flag"><b>Finding first: PostHog has already automated most of its code review.</b>
+<b id="agpct"></b> of merged PRs skip full human review via AI approval (the <code>stamphog</code> label), only
+<b>39%</b> of review activity is human, and five of the seven busiest reviewers are bots &mdash; <code>stamphog</code>
+alone left <b>8,460</b> reviews, more than any person. That is a change in how the org works, and it is why counting
+PRs, commits or reviews here measures automation rather than engineering. So none of them score below.</div>
 <p class="thesis">Four cohort percentiles instead. <b>Click any number</b> for what it means, the formula, and that engineer's own inputs;
 click any engineer for the PRs behind the score. <b>Evidence to check, not a verdict to accept.</b></p>
 <div class="cards" id="cards"></div>

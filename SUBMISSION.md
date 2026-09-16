@@ -6,6 +6,14 @@
 
 **A complete, working dashboard was live 21 minutes in** (commit `b7ac880` starts the work, `ba6a2b1` ships the dashboard, and GitHub Pages served it 18 seconds later — the interval is checkable in the public repo history). The rest of the time went to correctness work an independent review pass forced. A verification pass caught a misread GitHub label that had become the page's headline claim, corrected from "39% AI-authored" to "35.3% took AI-only approval." A measurement bug was counting bot-authored comments as human review scrutiny, letting diff size back into the pillar built to replace it. And a proposed per-PR median term was tested and rejected on evidence rather than shipped because it sounded right.
 
+## The finding worth more than the ranking
+
+The ranking answers the question asked. This is the part a PostHog leader probably does not already know: **the repo has largely automated its own code review.** 35.3% of merged PRs (5,359 of 15,162) carry `stamphog`, which GitHub describes as "Request AI approval (no full review)". Only 39% of review activity is human. Five of the seven busiest reviewers are bots, and `stamphog` alone left 8,460 reviews, more than any person.
+
+That is not a footnote about data hygiene. It means every conventional engineering metric in this repo is now measuring automation throughput: PR counts, commit counts, review counts and comment counts all move with bot activity. It also quietly changes what "reviewed" means, since a third of merged work never met a human reviewer.
+
+It is also the reason this dashboard scores none of those things, and why "attention" counts only human reviewers and human comments. I found it by chasing an implausible number (one account merging 121 PRs in a day) and initially misread it as AI-authored PRs before an independent check against the label API corrected me.
+
 ## Approach
 
 **The question I actually answered.** Not "who commits most" but "whose absence would the team feel first." Lines, commits, PR count and files changed are all present in the dataset and all contribute **zero** to the score — each has an obvious degenerate case, and one of them turned out to be actively broken at PostHog (below).
