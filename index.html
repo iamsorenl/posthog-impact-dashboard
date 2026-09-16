@@ -45,13 +45,14 @@ transition:border-color .12s,transform .12s;position:relative}
 .bars{display:flex;flex-direction:column;gap:3px}
 .br{display:grid;grid-template-columns:52px 1fr 26px;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
 .tr{display:block;height:5px;background:#0a0d13;border-radius:3px;overflow:hidden}
-.fl{height:100%;border-radius:3px}
+.fl{display:block;height:100%;border-radius:3px}
 .hl{font-size:10.5px;color:var(--dim);margin-top:7px;padding-top:6px;border-top:1px solid var(--line);
 line-height:1.4;min-height:29px}
 .hl b{color:var(--tx)}
 /* detail */
 .det{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px;
 display:grid;grid-template-columns:1.15fr 1.35fr 1fr;gap:18px}
+.det>div{min-width:0;overflow-x:auto}
 .det h2{font-size:13px;font-weight:650;margin-bottom:8px;display:flex;align-items:center;gap:7px}
 .det h2 span{color:var(--dim);font-weight:400;font-size:11px}
 .sec{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--dim);
@@ -73,7 +74,7 @@ text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-wi
 .mixk{display:flex;flex-wrap:wrap;gap:3px 9px;font-size:10px;color:var(--dim)}
 .mixk s{width:7px;height:7px;border-radius:2px;display:inline-block;margin-right:3px;text-decoration:none}
 /* leaderboard */
-.lb{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 14px}
+.lb{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 14px;overflow-x:auto}
 .lbh{display:flex;align-items:center;gap:10px;margin-bottom:7px}
 .pg{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dim)}
 .pg button{background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:5px;
