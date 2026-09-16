@@ -107,7 +107,7 @@ automation, not engineering &mdash; so this dashboard scores neither.</div>
 <p class="thesis">So impact here is <b>not</b> commits, lines, or PR count &mdash; all present in the data, all deliberately worth zero.
 It is four things a leader actually cares about: <b style="color:var(--lev)">how many teammates you unblock</b>,
 <b style="color:var(--bla)">whether your work lands on surfaces others depend on</b>,
-<b style="color:var(--shi)">whether what you ship draws real scrutiny</b>, and
+<b style="color:var(--shi)">how much human-reviewed work you actually land</b>, and
 <b style="color:var(--wor)">whether you carry the unglamorous fix/perf load</b>.
 Each score is a cohort percentile that opens into the named PRs behind it. This is <b>evidence to check, not a verdict to accept</b> &mdash; click any engineer and go falsify it.</p>
 <div class="cards" id="cards"></div>
@@ -116,6 +116,9 @@ Each score is a cohort percentile that opens into the named PRs behind it. This 
 <span><s>&#9679;</s><b>Support rotation.</b> A week on support hero produces near-zero PRs and real customer impact.</span>
 <span><s>&#9679;</s><b>Long-cycle work.</b> Eight weeks on a query-planner rewrite lands as one PR and scores at the floor.</span>
 <span><s>&#9679;</s><b>Greenfield penalty.</b> Blast radius rewards crowded files, so anyone alone in a new product area scores low by construction.</span>
+<span><s>&#9679;</s><b>Volume still leaks in.</b> The composite correlates <b>&rho;=0.90</b> with merged-PR count
+even though PR count is weighted zero &mdash; percentiles of per-PR sums are partly rank transforms of PR count.
+Filtering bot comments out of "attention" cut this pillar from &rho;=0.98 to 0.86; it is reduced, not solved.</span>
 <span><s>&#9679;</s><b>Individual ranking is contested.</b> SPACE and DORA scope deliberately to teams, not people.
 <a href="#" onclick="document.getElementById('m').showModal();return false">Full methodology &amp; limits &rarr;</a></span></div>
 <div class="det" id="det"></div>
@@ -125,7 +128,7 @@ Each score is a cohort percentile that opens into the named PRs behind it. This 
       <button id="pv">&larr;</button><button id="nx">&rarr;</button></div></div>
   <table><thead><tr><th style="width:38px">#</th><th>Engineer</th><th style="width:58px">Score</th>
   <th>Leverage</th><th>Blast radius</th><th>Shipping</th><th>Work mix</th>
-  <th class="n">Merged</th><th class="n">Reviews</th><th class="n">Unblocked</th></tr></thead>
+  <th class="n">Engineers<br>unblocked</th><th class="n" style="font-weight:400">Merged PRs<br><span style="text-transform:none;letter-spacing:0">(not scored)</span></th></tr></thead>
   <tbody id="lbb"></tbody></table>
 </div>
 
@@ -154,7 +157,7 @@ Distinct people, not review count, so reviewing one teammate 50 times does not l
 <i>shared-surface</i> files you touched (files <span id="mc"></span>+ distinct engineers also touched in the window);
 half is the count of distinct engineers who touch the same files as you. A big diff in an isolated corner
 scores near zero; a small diff in a hot path scores high.</li>
-<li><b style="color:var(--shi)">Consequential shipping (25%)</b> &mdash; your merged work weighted by the
+<li><b style="color:var(--shi)">Reviewed throughput (25%)</b> &mdash; your merged work weighted by the
 <i>attention it attracted</i>, not its size. Attention = distinct reviewers + 0.5&times;inline review threads
 + 0.25&times;comments. This uses the org's own scrutiny as the signal of consequence: a 2,000-line PR nobody
 read scores below a 20-line PR that five engineers argued over.</li>
@@ -162,6 +165,20 @@ read scores below a 20-line PR that five engineers argued over.</li>
 work (60%) plus the breadth of work types you cover (40%). Credits the person keeping production healthy,
 which feature-count metrics systematically miss.</li>
 </ul>
+<h4>What "attention" counts &mdash; and what it used to count</h4>
+<p>Bots author <b>71%</b> of issue comments and over half of inline review comments in this repo, and AI reviewers
+comment roughly in proportion to diff size. An earlier version counted raw comment and thread totals, which quietly
+let lines-of-code back in through the pillar built to replace it. Attention now counts only <b>human</b> reviewers,
+human inline review comments and human issue comments, all excluding the PR author. That dropped the top-decile
+threshold from 6.5 to <span id="mth"></span> and this pillar's correlation with PR count from 0.98 to 0.86.</p>
+<h4>A change that was tested and rejected</h4>
+<p>To blunt the remaining volume sensitivity we tested adding <i>median attention per PR</i> as a density term.
+It was rejected on the evidence: it takes only 26 distinct values across 154 engineers (so one comment on one PR can
+swing a score more than the gap between 1st and 3rd), correlates just &minus;0.28 with AI-approval share, and its
+largest beneficiaries are engineers with two to five PRs. It also penalises requesting AI approval on trivial
+changes, which is PostHog's own documented triage. Peak-based and reweighting alternatives were tested too and
+changed almost nothing. The honest conclusion was to fix the input rather than add a statistic, and to state the
+residual bias plainly above.</p>
 <h4>Scoring</h4>
 <p>Each sub-metric is converted to a <b>percentile within this 90-day cohort</b>, so "78" means
 "higher than 78% of eligible contributors on that dimension" &mdash; not an arbitrary point total.
@@ -184,7 +201,7 @@ actual PRs behind every number.</p>
 
 <script>
 const D=JSON.parse(document.getElementById('D').textContent),M=D.meta,EN=D.engineers;
-const PL=[['leverage','Leverage','lev'],['blast','Blast radius','bla'],['shipping','Shipping','shi'],['workmix','Work mix','wor']];
+const PL=[['leverage','Leverage','lev'],['blast','Blast radius','bla'],['shipping','Reviewed throughput','shi'],['workmix','Work mix','wor']];
 const MIXC={feat:'#5fd48a',fix:'#f5b855',perf:'#6ea8fe',infra:'#d98cf5',refactor:'#8b95a6',
 test:'#4fc3c3',docs:'#6b7689',revert:'#ff6b6b',other:'#3d4761'};
 const f=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
@@ -202,6 +219,7 @@ document.getElementById('mc').textContent=M.core_file_min_authors;
 document.getElementById('me').textContent=M.eligibility;
 document.getElementById('lbn').textContent='— top '+EN.length+' of '+M.contributors_eligible+' eligible';
 var mc=document.getElementById('mcap');if(mc)mc.textContent=M.attention_cap;
+var mt=document.getElementById('mth');if(mt)mt.textContent=M.attention_high_threshold;
 
 // headline: the single most distinctive thing about this engineer
 function headline(e){
@@ -270,7 +288,8 @@ function draw(){
   <td><b style="color:var(--acc)">${pctf(e.score)}</b></td>
   ${PL.map(([k,l,c])=>`<td><span class="mini"><i style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
    <span style="color:var(--dim);font-size:10px;margin-left:4px">${pctf(e.pillars[k])}</span></td>`).join('')}
-  <td class="n">${e.raw.merged}</td><td class="n">${f(e.raw.reviews_given)}</td><td class="n">${e.raw.distinct_helped}</td></tr>`).join('');
+  <td class="n"><b style="color:var(--tx)">${e.raw.distinct_helped}</b></td>
+  <td class="n" style="opacity:.5">${f(e.raw.merged)} <span style="font-size:9px">&middot; ${Math.round(e.raw.ai_approved_share*100)}% AI-appr</span></td></tr>`).join('');
  document.getElementById('pgi').textContent=`${s+1}–${Math.min(s+PER,EN.length)} of ${EN.length}`;
  document.getElementById('pv').disabled=pg===0;document.getElementById('nx').disabled=pg>=pages-1;
 }

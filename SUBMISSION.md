@@ -2,13 +2,13 @@
 
 **Dashboard:** https://iamsorenl.github.io/posthog-impact-dashboard/
 **Source:** https://github.com/iamsorenl/posthog-impact-dashboard
-**Time:** ~95 minutes (over the 90-minute budget; the dashboard was live and correct at ~85, the rest was a rendering fix and validation)
+**Time:** <TIME>
 
 ## Approach
 
 **The question I actually answered.** Not "who commits most" but "whose absence would the team feel first." Lines, commits, PR count and files changed are all present in the dataset and all contribute **zero** to the score — each has an obvious degenerate case, and one of them turned out to be actively broken at PostHog (below).
 
-**The finding that reshaped the model.** Volume metrics don't just fail in principle at PostHog, they fail mechanically. **35.3% of merged PRs (5,359 of 15,162) carry the `stamphog` label** — GitHub's own description: *"Request AI approval (no full review)"* — meaning the author asked a bot to approve rather than waiting on full human review. And **six of the seven highest-volume reviewers in the repo are bots**; `stamphog` alone left 8,460 reviews, more than any human. Counting PRs or reviews in this repo measures automation, not engineering, so the model scores neither.
+**The finding that reshaped the model.** Volume metrics don't just fail in principle at PostHog, they fail mechanically. **35.3% of merged PRs (5,359 of 15,162) carry the `stamphog` label** — GitHub's own description: *"Request AI approval (no full review)"* — meaning the author asked a bot to approve rather than waiting on full human review. And **five of the seven highest-volume reviewers in the repo are bots**; `stamphog` alone left 8,460 reviews, more than any human. Counting PRs or reviews in this repo measures automation, not engineering, so the model scores neither.
 
 *(I got this wrong first: an earlier build read `stamphog` as "AI-authored" and inflated the figure by unioning it with `skip-agent-review`, a label meaning roughly the opposite. An independent verification pass against the GitHub label API caught it. The corrected reading is on the dashboard, and the same audit exposed a leaky bot filter that was counting ~19k AI reviews as human activity.)*
 
