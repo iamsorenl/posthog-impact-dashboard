@@ -1,3 +1,11 @@
+# Publish ONLY the built page. Without this, `netlify deploy` ships the whole
+# working directory: data/raw/, the bare posthog-repo clone, probe dumps and
+# screenshots all land on the CDN.
 [build]
-  publish = "."
+  publish = "public"
   command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
