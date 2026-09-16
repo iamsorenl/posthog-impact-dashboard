@@ -1,6 +1,8 @@
 # Weave take-home — Engineering Impact Dashboard
 
-Private. Prompt: `takehome-prompt.pdf` (assessment `asmt_eD1bGr5o2Ea75Z0p0gnhglFW`, received 2026-09-15).
+Private. Prompt: **`takehome-prompt.md`** is the authoritative full text. `takehome-prompt.pdf` is
+the original print and is truncated at the page break (loses everything from "What to Submit" on).
+Assessment `asmt_eD1bGr5o2Ea75Z0p0gnhglFW`, received 2026-09-15, due ~2026-09-18.
 
 ## The ask, digested
 
