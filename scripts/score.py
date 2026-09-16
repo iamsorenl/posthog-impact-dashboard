@@ -14,6 +14,12 @@ BOT_RE = re.compile(
     r"|^stamphog$|veria-ai|parameterai|chatgpt-codex|codex-connector|copilot|graphite-app"
     r"|mendral|talyn|force-merge|posthog-local-dev|-ai$|-app$|-apps$", re.I)
 PR_IN_SUBJECT = re.compile(r"\(#(\d+)\)")
+# Generated/lock/snapshot files are touched by everyone and owned by no one. Counting them as
+# "shared surfaces" made every engineer's evidence panel show an identical file list.
+GENERATED_RE = re.compile(
+    r"generated|__snapshots__|snapshots?\.(ya?ml|json)$|\.snap$|-lock\.(json|ya?ml)$"
+    r"|(package-lock\.json|pnpm-lock\.ya?ml|poetry\.lock|Cargo\.lock|yarn\.lock|go\.sum)$"
+    r"|\.min\.(js|css)$|(^|/)(dist|build|vendor|node_modules)/", re.I)
 
 WEIGHTS = {"leverage": 0.35, "blast": 0.25, "shipping": 0.25, "workmix": 0.15}
 MIN_PRS, MIN_REVIEWS = 3, 5          # eligibility floor
@@ -123,7 +129,7 @@ if os.path.exists(git_path):
             continue
         git_stats["joined"] += 1
         for fp in (l.strip() for l in lines[1:]):
-            if fp:
+            if fp and not GENERATED_RE.search(fp):
                 file_authors[fp].add(login)
                 eng_files[login].add(fp)
 
@@ -259,7 +265,7 @@ out = {
                                                       (p.get("author") or {}).get("__typename"))),
         "contributors_total": len(E), "contributors_eligible": len(elig),
         "git_commits": git_stats["commits"], "git_joined_to_pr": git_stats["joined"],
-        "files_tracked": len(file_centrality),
+        "files_tracked": len(file_centrality), "generated_files_excluded": True,
         "weights": WEIGHTS, "attention_high_threshold": round(ATT_HIGH, 2),
         "eligibility": f"merged>={MIN_PRS} or reviews>={MIN_REVIEWS}",
         "core_file_min_authors": CORE_FILE_MIN_AUTHORS, "attention_cap": ATT_CAP, "enriched_prs": len(ENR), "attention_basis": "human reviewers, human inline review comments, human issue comments",

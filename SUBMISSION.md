@@ -16,7 +16,7 @@
 
 - **Review leverage (35%)** — distinct engineers whose PRs you reviewed, plus substantive (non-rubber-stamp) reviews. Bare approvals score zero. Measures the multiplier effect.
 - **Blast radius (25%)** — shared-surface files you touched (files ≥5 distinct engineers also touched) and distinct engineers co-editing them. A big diff in an isolated corner scores near zero.
-- **Consequential shipping (25%)** — merged work weighted by the review attention it attracted, capped per PR so one flamewar can't carry someone. Uses the org's own scrutiny as the proxy for consequence rather than diff size.
+- **Reviewed throughput (25%)** — merged work weighted by the human review attention it attracted (human reviewers, human inline review comments, human issue comments, all excluding the author), capped per PR so one flamewar can't carry someone. Named for what it measures, not "consequence": it still correlates rho=0.86 with merged-PR count (below).
 - **Work mix & load (15%)** — fix/perf share and breadth of work types. Credits the person keeping production healthy.
 
 Every score opens into the named PRs, files and people behind it, so the ranking is falsifiable rather than asserted.
@@ -25,18 +25,28 @@ Every score opens into the named PRs, files and people behind it, so the ranking
 
 Every merged PR in `PostHog/posthog` for 2026-06-18 → 2026-09-16: **15,162 PRs**, fetched from the GitHub GraphQL API **one day at a time** to stay under the API's 1,000-result search cap. Completeness is asserted per day (`expected == fetched`); all 91 days matched with **zero mismatches** — complete, not sampled.
 
-File-level data comes from a treeless clone plus `git log --name-only`: **14,831 commits, 150,300 file touches**, joined to PR authorship via the `(#NNNNN)` squash reference at a **99.7%** join rate. This is more complete than the API's `files` connection, which truncates at 100 files, and it cost zero API calls.
+File-level data comes from a treeless clone plus `git log --name-only`: **14,831 commits, 150,300 file touches**, joined to PR authorship via the `(#NNNNN)` squash reference. 99.7% of commits carry that reference; **90.0%** of all commits (13,351/14,831) resolve to a known human PR author, the rest belong to bot-authored or out-of-window PRs. This is more complete than the API's `files` connection, which truncates at 100 files, and it cost zero API calls.
 
-Dashboard is a single self-contained 266 KB HTML file with the scored data inlined as JSON — no framework, no build step, no network calls after load. **Loads in ~0.17s.**
+Of 230 total contributors, 158 clear the eligibility floor (≥3 merged PRs or ≥5 reviews); the page inlines the top 150 by score, so the bottom 8 eligible engineers are counted in the header stat but not individually rankable.
+
+Dashboard is a single self-contained ~283 KB HTML file with the scored data inlined as JSON — no framework, no build step. It does still load engineer avatars from `github.com` after load, so it isn't fully offline.
 
 ## What it cannot see — stated on the page, not buried
 
+**Volume still wins on the back door.** No pillar weights PR count, yet `corr(log(merged PRs), score) ≈ 0.89` across the 150 ranked engineers, because percentiles of per-PR sums are partly rank transforms of PR count. This is the biggest gap between what the model claims to measure and what it rewards.
+
+*What I did about it:* bots author ~71% of issue comments and over half of inline review comments in this repo, and AI reviewers comment roughly in proportion to diff size — so raw comment totals were letting lines-of-code back in through the pillar built to replace it. Attention now counts only human reviewers and human comments, excluding the PR author, cutting that pillar's correlation with PR count from 0.98 to 0.86.
+
+*What I tested and rejected:* adding per-PR **median** attention as a density term. It takes only 26 distinct values across 154 engineers, so one comment on one PR can swing a score more than the gap between 1st and 3rd; it correlates just −0.28 with AI-approval share, so the mechanism I claimed barely exists; its largest beneficiaries have two to five merged PRs; and it penalises requesting AI approval on trivial changes, which is PostHog's own documented triage. Peak-based and reweighting variants changed almost nothing. The honest answer was to fix the input, not add a statistic, and to state the residual bias rather than disguise it.
+
+One source of that correlation was real and fixable, and it's fixed: attention originally counted *all* reviewers, threads and comments, including bots. Bots author roughly 71% of issue comments and over half of inline review comments in this repo, and AI reviewers comment roughly in proportion to diff size — so raw comment/thread totals were quietly letting lines-of-code back in through the pillar built to replace it. Attention now counts only human reviewers, human inline review comments and human issue comments, excluding the PR author. That dropped reviewed-throughput's correlation with PR count from 0.98 to 0.86 and the top-decile attention threshold from 6.5 to 2.5.
+
+**Tried and rejected:** blending `attention_sum` with a per-PR median, so consistency would count alongside quantity. Killed on inspection: the median only took ~26 distinct values across the eligible pool, so one comment on one PR could swing a score more than the gap between 1st and 3rd place; it correlated barely (-0.28) with AI-approval share, so the mechanism it was meant to counteract was mostly absent; its biggest beneficiaries were engineers with 2-5 merged PRs, not the profile it targeted; and it penalized requesting AI approval on trivial changes, which is PostHog's own documented triage, not a shortcut. Peak-based and reweighted variants changed essentially nothing either. Fixing the input, not bolting on a second statistic, was the right lever.
+
 Glue work (RFCs, design review, mentoring), the support-hero rotation, long-cycle work that lands as one PR, and a structural greenfield penalty: blast radius rewards crowded files, so anyone alone in a new product area scores low by construction. Percentile scoring also disadvantages new hires.
 
-More fundamentally: SPACE (Forsgren et al. 2021), DORA and Deming are consistent that ranking individuals on delivery telemetry is unsound — those frameworks scope deliberately to teams and systems. The dashboard presents as evidence to check, not a verdict to accept.
-
-**Known weakness I'd fix next:** `attention_sum` is a sum over PRs, so volume re-enters through the side door — an engineer with 2,414 merged PRs accumulates attention that 100 excellent PRs can't match. The fix is to blend the sum with a per-PR median so consistency counts alongside quantity.
+More fundamentally: ranking individuals on delivery telemetry is contested. SPACE (Forsgren et al. 2021) does define individual-level metrics, but warns against using any single one, especially activity counts, as a productivity proxy — this dashboard uses several dimensions but is still one composite score per person. DORA's four keys are explicitly team/org-level, not individual, so they don't directly license a leaderboard like this at all. And Deming's argument against merit rating (attributing system-level outcomes to individuals) applies squarely: a lot of what this score reflects is what code review culture and team structure route toward someone, not just what they did. The dashboard presents as evidence to check, not a verdict to accept.
 
 ## Feedback on the format
 
-Far better than a Leetcode round — it surfaced a real judgment call (the agent-authored PR problem) that no algorithm question would have. The 90-minute budget is tight for "gather + analyze + build + host": data acquisition alone was ~25 minutes, and the interesting analytical work is what gets squeezed.
+Far better than a Leetcode round — it surfaced a real judgment call (AI approval quietly replacing human review, and bots dominating review volume) that no algorithm question would have. The 90-minute budget is tight for "gather + analyze + build + host": a large chunk goes to data acquisition alone, and the interesting analytical work is what gets squeezed.
