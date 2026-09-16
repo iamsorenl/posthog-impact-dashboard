@@ -8,7 +8,9 @@
 
 **The question I actually answered.** Not "who commits most" but "whose absence would the team feel first." Lines, commits, PR count and files changed are all present in the dataset and all contribute **zero** to the score — each has an obvious degenerate case, and one of them turned out to be actively broken at PostHog (below).
 
-**The finding that reshaped the model.** 39% of merged PRs in the window (5,955 of 15,162) are authored by PostHog's own AI agent, `stamphog`, and merged under human accounts — one account merged 121 in a single day. Any volume-based metric at PostHog today is measuring agent throughput, not engineering. Agent PRs are counted and labelled on the dashboard, but excluded from the shipping pillar, since they aren't the human's shipping judgment.
+**The finding that reshaped the model.** Volume metrics don't just fail in principle at PostHog, they fail mechanically. **35.3% of merged PRs (5,359 of 15,162) carry the `stamphog` label** — GitHub's own description: *"Request AI approval (no full review)"* — meaning the author asked a bot to approve rather than waiting on full human review. And **six of the seven highest-volume reviewers in the repo are bots**; `stamphog` alone left 8,460 reviews, more than any human. Counting PRs or reviews in this repo measures automation, not engineering, so the model scores neither.
+
+*(I got this wrong first: an earlier build read `stamphog` as "AI-authored" and inflated the figure by unioning it with `skip-agent-review`, a label meaning roughly the opposite. An independent verification pass against the GitHub label API caught it. The corrected reading is on the dashboard, and the same audit exposed a leaky bot filter that was counting ~19k AI reviews as human activity.)*
 
 **Four pillars**, each a cohort percentile, combined 35/25/25/15:
 
@@ -33,7 +35,7 @@ Glue work (RFCs, design review, mentoring), the support-hero rotation, long-cycl
 
 More fundamentally: SPACE (Forsgren et al. 2021), DORA and Deming are consistent that ranking individuals on delivery telemetry is unsound — those frameworks scope deliberately to teams and systems. The dashboard presents as evidence to check, not a verdict to accept.
 
-**Known weakness I'd fix next:** `attention_sum` is a sum over PRs, so volume re-enters through the side door — an engineer with 966 human PRs accumulates attention that 100 excellent PRs can't match. The fix is to blend the sum with a per-PR median so consistency counts alongside quantity.
+**Known weakness I'd fix next:** `attention_sum` is a sum over PRs, so volume re-enters through the side door — an engineer with 2,414 merged PRs accumulates attention that 100 excellent PRs can't match. The fix is to blend the sum with a per-PR median so consistency counts alongside quantity.
 
 ## Feedback on the format
 

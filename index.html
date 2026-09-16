@@ -189,6 +189,8 @@ const MIXC={feat:'#5fd48a',fix:'#f5b855',perf:'#6ea8fe',infra:'#d98cf5',refactor
 test:'#4fc3c3',docs:'#6b7689',revert:'#ff6b6b',other:'#3d4761'};
 const f=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
 const pctf=v=>v.toFixed(0);
+const ord=v=>{const n=Math.round(v),t=n%10,h=n%100;
+ return (t===1&&h!==11)?'st':(t===2&&h!==12)?'nd':(t===3&&h!==13)?'rd':'th';};
 
 document.getElementById('meta').innerHTML=
  `<b>${M.window[0]}</b> to <b>${M.window[1]}</b> &middot; <b>${f(M.merged_prs)}</b> merged PRs &middot; `+
@@ -237,7 +239,7 @@ function detail(i){
    <a href="https://github.com/${e.login}" target="_blank" rel="noopener">${e.login}</a>
    <span>rank #${EN.indexOf(e)+1} &middot; score ${pctf(e.score)} &middot; active ${e.active[0]} &rarr; ${e.active[1]}</span></h2>
   ${PL.map(([k,l,c])=>`<div class="pil"><div class="top"><b style="color:var(--${c})">${l}</b>
-    <span>${pctf(e.pillars[k])}<span style="color:var(--dim);font-size:10px">th pct</span></span></div>
+    <span>${pctf(e.pillars[k])}<span style="color:var(--dim);font-size:10px">${ord(e.pillars[k])} pct</span></span></div>
     <span class="tr" style="display:block"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
     <div class="why">${why(e,k)}</div></div>`).join('')}
   <div class="sec" style="margin-top:11px">Work mix &middot; ${tot} merged PRs</div>
