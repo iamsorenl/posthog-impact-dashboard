@@ -5,11 +5,11 @@ Source: https://github.com/iamsorenl/posthog-impact-dashboard
 
 The interesting work in this assignment is the definition, not the dashboard, so I spent the first stretch deciding what to throw away.
 
-The test I applied to every signal was the same: if I weighted this, what behaviour would it reward, and is that what I want? Lines changed rewards verbosity and punishes deletion, though deletion is often the better pull request. Commit count measures commit hygiene. Files touched rewards sprawl and punishes focus. Time to merge measures reviewer availability and timezone overlap, not the author. Pull request count rewards splitting work up, which is a formatting choice, not a contribution.
+The test I applied to every signal was the same: if I weighted this, what behavior would it reward, and is that what I want? Lines changed rewards verbosity and punishes deletion, though deletion is often the better pull request. Commit count measures commit hygiene. Files touched rewards sprawl and punishes focus. Time to merge measures reviewer availability and timezone overlap, not the author. Pull request count rewards splitting work up, which is a formatting choice, not a contribution.
 
 Every one had an obvious way to score well without being useful, so every one contributes exactly zero. They are still shown on the page, because a reader should be able to see for themselves that a high-volume and a low-volume engineer can land in nearly the same place. Hiding them would turn the argument into an assertion.
 
-What survived had to pass a different test: would an engineering leader who knows this team recognise the person it ranks highly? That question pointed at four things, each measuring a different kind of contribution so that they do not collapse into one another.
+What survived had to pass a different test: would an engineering leader who knows this team recognize the person it ranks highly? That question pointed at four things, each measuring a different kind of contribution so that they do not collapse into one another.
 
 ## What I ended up measuring
 
@@ -17,7 +17,7 @@ What survived had to pass a different test: would an engineering leader who know
 
 **Blast radius** asks whether your work lands where other people work. A file that many engineers change is a shared surface, and touching it means your decisions constrain theirs. A large change in an isolated corner scores near zero here, while a small change in a heavily shared path scores high. The point is to separate consequence from size.
 
-**Reviewed throughput** measures what you shipped, weighted not by how big it was but by how much human scrutiny it drew. The reasoning is that the organisation's own attention is a better proxy for consequence than diff size: a large pull request nobody read is less consequential than a small one several engineers argued over. I named this pillar for what it actually measures rather than what I wanted it to measure. It correlates strongly with raw output, so calling it "consequential shipping", as I did in an earlier draft, would have been overclaiming.
+**Reviewed throughput** measures what you shipped, weighted not by how big it was but by how much human scrutiny it drew. The reasoning is that the organization's own attention is a better proxy for consequence than diff size: a large pull request nobody read is less consequential than a small one several engineers argued over. I named this pillar for what it actually measures rather than what I wanted it to measure. It correlates strongly with raw output, so calling it "consequential shipping", as I did in an earlier draft, would have been overclaiming.
 
 **Work mix** is the smallest component and credits the person carrying the unglamorous load: the share of work that is fixes and performance rather than features, plus the breadth of work types covered. Feature-count framing systematically misses the person quietly keeping production healthy.
 

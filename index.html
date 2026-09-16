@@ -193,7 +193,7 @@ It is reduced, not solved.</p>
 <p>To blunt the remaining volume sensitivity we tested adding <i>median attention per PR</i> as a density term.
 It was rejected on the evidence: it takes only 26 distinct values across 154 engineers (so one comment on one PR can
 swing a score more than the gap between 1st and 3rd), correlates just &minus;0.28 with AI-approval share, and its
-largest beneficiaries are engineers with two to five PRs. It also penalises requesting AI approval on trivial
+largest beneficiaries are engineers with two to five PRs. It also penalizes requesting AI approval on trivial
 changes, which is PostHog's own documented triage. Peak-based and reweighting alternatives were tested too and
 changed almost nothing. The honest conclusion was to fix the input rather than add a statistic, and to state the
 residual bias plainly on the page.</p>

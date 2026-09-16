@@ -18,7 +18,7 @@ session is part of the timed work, and nothing outside it is included here.
 ## How to read `transcript.md`
 
 - Human turns are marked `## 🧑 Soren`, assistant turns `### 🤖 Assistant`.
-- Tool calls are summarised to a single bulleted line (tool name + the key
+- Tool calls are summarized to a single bulleted line (tool name + the key
   argument, e.g. the file path for a `Read`/`Edit`, the command for a `Bash`
   call, or the description for a spawned subagent) — not the full tool-call
   payload.
