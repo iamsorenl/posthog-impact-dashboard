@@ -101,7 +101,7 @@ dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
 </header>
 <div class="flag"><b>Why volume metrics fail at PostHog specifically:</b> <b id="agpct"></b> of merged PRs were
 approved by an AI reviewer instead of a full human review (the <code>stamphog</code> label &mdash; GitHub's own description:
-<i>"Request AI approval (no full review)"</i>). And six of the seven highest-volume reviewers in this repo are bots:
+<i>"Request AI approval (no full review)"</i>). And five of the seven highest-volume reviewers in this repo are bots:
 <code>stamphog</code> alone left <b>8,460</b> reviews, more than any human. Counting PRs or reviews here measures
 automation, not engineering &mdash; so this dashboard scores neither.</div>
 <p class="thesis">So impact here is <b>not</b> commits, lines, or PR count &mdash; all present in the data, all deliberately worth zero.
@@ -120,7 +120,7 @@ Each score is a cohort percentile that opens into the named PRs behind it. This 
 <a href="#" onclick="document.getElementById('m').showModal();return false">Full methodology &amp; limits &rarr;</a></span></div>
 <div class="det" id="det"></div>
 <div class="lb">
-  <div class="lbh"><div class="sec" style="margin:0">All eligible contributors</div>
+  <div class="lbh"><div class="sec" style="margin:0">Contributor leaderboard <span id="lbn" style="text-transform:none;letter-spacing:0;font-weight:400"></span></div>
     <div class="pg"><span id="pgi"></span>
       <button id="pv">&larr;</button><button id="nx">&rarr;</button></div></div>
   <table><thead><tr><th style="width:38px">#</th><th>Engineer</th><th style="width:58px">Score</th>
@@ -200,6 +200,7 @@ document.getElementById('agpct').textContent=Math.round(100*M.ai_approved_prs/M.
 document.getElementById('mw').textContent=M.window[0]+' to '+M.window[1];
 document.getElementById('mc').textContent=M.core_file_min_authors;
 document.getElementById('me').textContent=M.eligibility;
+document.getElementById('lbn').textContent='— top '+EN.length+' of '+M.contributors_eligible+' eligible';
 var mc=document.getElementById('mcap');if(mc)mc.textContent=M.attention_cap;
 
 // headline: the single most distinctive thing about this engineer

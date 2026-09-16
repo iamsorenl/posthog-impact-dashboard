@@ -13,9 +13,14 @@ File-level data comes from a treeless clone of the repo (`git log --name-only`):
 join rate — more complete than the API's `files` connection, which truncates at 100 files.
 
 ## The finding that shapes everything
-**39% of merged PRs (5,955) are authored by PostHog's own AI agent (`stamphog`)** and merged under a
-human account; one account merged 121 in a single day. Any volume metric now measures agent throughput.
-Agent PRs are counted and labelled, but excluded from the shipping pillar.
+**35.3% of merged PRs (5,359) carry the `stamphog` label**, which GitHub describes as
+*"Request AI approval (no full review)"* — the author asked a bot to approve rather than waiting on a full
+human review. And **five of the seven highest-volume reviewers in the repo are bots**; `stamphog` alone left
+8,460 reviews, more than any human. Counting PRs or reviews here measures automation, not engineering.
+
+(An earlier build read `stamphog` as "AI-authored" and inflated the figure by unioning it with
+`skip-agent-review`, a label meaning roughly the opposite. An independent verification pass against the
+GitHub label API caught it.)
 
 ## Impact model
 Four pillars, each a cohort percentile, combined 35/25/25/15. Volume metrics contribute **zero**.
@@ -29,6 +34,6 @@ penalty, new hires, and why SPACE/DORA/Deming say individual ranking is unsound)
 
 ## Run it
 ```
-python3 scripts/fetch_prs.py 2026-06-17 2026-09-16 data/raw/prs.jsonl
+python3 scripts/fetch_prs.py 2026-06-18 2026-09-16 data/raw/prs.jsonl
 python3 scripts/score.py && python3 scripts/build.py
 ```

@@ -3,3 +3,6 @@ posthog-repo/
 __pycache__/
 .playwright-mcp/
 *.png
+probe*.json
+probe*.err
+.netlify/

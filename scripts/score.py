@@ -12,7 +12,7 @@ BOT_RE = re.compile(
     r"|allcontributors|stale|mergify|semantic-release"
     # AI review/approval accounts verified against this repo's own review volume
     r"|^stamphog$|veria-ai|parameterai|chatgpt-codex|codex-connector|copilot|graphite-app"
-    r"|mendral|-ai$|-app$|-apps$", re.I)
+    r"|mendral|talyn|force-merge|posthog-local-dev|-ai$|-app$|-apps$", re.I)
 PR_IN_SUBJECT = re.compile(r"\(#(\d+)\)")
 
 WEIGHTS = {"leverage": 0.35, "blast": 0.25, "shipping": 0.25, "workmix": 0.15}
@@ -45,22 +45,31 @@ def pct(values):
     return out
 
 
+PREFIX_RE = re.compile(r"^\s*(feat|feature|fix|perf|chore|docs?|refactor|test|ci|build|revert)\b", re.I)
+PREFIX_MAP = {"feature": "feat", "doc": "docs", "chore": "infra", "ci": "infra", "build": "infra"}
+KEYWORDS = [
+    ("revert",   r"\brevert\b"),
+    ("perf",     r"\bperf\b|performance|optimi|speed ?up|faster|latency"),
+    ("fix",      r"\bfix(es|ed)?\b|\bbug\b|hotfix|regression|\bbroken\b"),
+    ("infra",    r"\binfra\b|\bci\b|\bdeploy\b|migration|docker|terraform|\bdeps\b"),
+    ("docs",     r"\bdocs?\b|documentation|readme"),
+    ("refactor", r"refactor|clean ?up|\btidy\b|\brename\b|dead code"),
+    ("test",     r"\btests?\b|\bspec\b|\be2e\b|flaky"),
+    ("feat",     r"\bfeat\b|\badds?\b|implement|introduce|\bsupport\b"),
+]
+KEYWORDS = [(k, re.compile(v, re.I)) for k, v in KEYWORDS]
+
+
 def classify(title, labels):
-    t = (title or "").lower()
-    lab = " ".join(labels).lower()
-    blob = t + " " + lab
-    if t.startswith("revert") or "revert" in t[:20]:
-        return "revert"
-    for key, pats in (
-        ("perf", ("perf", "performance", "optimi", "speed up", "faster", "latency")),
-        ("fix", ("fix", "bug", "hotfix", "patch", "regression", "broken")),
-        ("infra", ("infra", "ci", "build", "deploy", "migration", "chore(deps", "docker", "terraform")),
-        ("docs", ("docs", "documentation", "readme", "comment")),
-        ("refactor", ("refactor", "cleanup", "clean up", "tidy", "rename", "dead code")),
-        ("test", ("test", "spec", "e2e", "flaky")),
-        ("feat", ("feat", "add ", "new ", "implement", "support", "introduce")),
-    ):
-        if any(p in blob for p in pats):
+    """Conventional-commit prefix wins; keyword match (word-bounded) is the fallback."""
+    t = title or ""
+    m = PREFIX_RE.match(t)
+    if m:
+        k = m.group(1).lower()
+        return PREFIX_MAP.get(k, k)
+    blob = t + " " + " ".join(labels)
+    for key, rx in KEYWORDS:
+        if rx.search(blob):
             return key
     return "other"
 
@@ -79,6 +88,15 @@ for p in prs:
         seen.add(p["number"])
         uniq.append(p)
 prs = uniq
+
+# ---------- load enrichment: complete reviews + comment authorship ----------
+ENR = {}
+for path in sorted(glob.glob(os.path.join(RAW, "enr_*.jsonl"))):
+    with open(path) as f:
+        for line in f:
+            if line.strip():
+                r = json.loads(line)
+                ENR[r["number"]] = r
 
 # ---------- load git file history, join to PR authors ----------
 file_authors = collections.defaultdict(set)   # path -> {login}
@@ -125,11 +143,20 @@ for p in prs:
     a = p.get("author") or {}
     author = a.get("login")
     author_ok = not is_bot(author, a.get("__typename"))
-    rev_nodes = [r for r in p["reviews"]["nodes"] if r and (r.get("author") or {}).get("login")]
+    enr = ENR.get(p["number"])
+    src = enr if enr else p
+    rev_nodes = [r for r in src["reviews"]["nodes"] if r and (r.get("author") or {}).get("login")]
     distinct_reviewers = {r["author"]["login"] for r in rev_nodes
                           if not is_bot(r["author"]["login"]) and r["author"]["login"] != author}
-    threads = p["reviewThreads"]["totalCount"]
-    comments = p["comments"]["totalCount"]
+    # inline review comments written by human reviewers other than the author
+    threads = sum((r.get("comments") or {}).get("totalCount", 0) for r in rev_nodes
+                  if not is_bot(r["author"]["login"]) and r["author"]["login"] != author)
+    if enr:
+        comments = sum(1 for c in enr["comments"]["nodes"]
+                       if c and (c.get("author") or {}).get("login")
+                       and not is_bot(c["author"]["login"]) and c["author"]["login"] != author)
+    else:
+        comments = 0
     attention = min(len(distinct_reviewers) + 0.5 * threads + 0.25 * comments, ATT_CAP)
     all_attention.append(attention)
 
@@ -235,7 +262,7 @@ out = {
         "files_tracked": len(file_centrality),
         "weights": WEIGHTS, "attention_high_threshold": round(ATT_HIGH, 2),
         "eligibility": f"merged>={MIN_PRS} or reviews>={MIN_REVIEWS}",
-        "core_file_min_authors": CORE_FILE_MIN_AUTHORS, "attention_cap": ATT_CAP,
+        "core_file_min_authors": CORE_FILE_MIN_AUTHORS, "attention_cap": ATT_CAP, "enriched_prs": len(ENR), "attention_basis": "human reviewers, human inline review comments, human issue comments",
         "ai_approved_prs": sum(1 for p in prs if AI_APPROVAL_LABEL in {l["name"] for l in p["labels"]["nodes"]}),
     },
     "engineers": engineers[:150],
