@@ -29,7 +29,18 @@ padding:5px 11px;margin-bottom:8px;font-size:10.5px;color:var(--dim);line-height
 .cant summary{cursor:pointer;list-style:none}.cant summary::-webkit-details-marker{display:none}
 .cant summary>b{color:var(--tx);font-size:11px}.cant summary u{text-decoration:none;color:var(--lev);margin-left:6px}
 .cant[open] summary u{display:none}.cant>div{display:flex;flex-wrap:wrap;gap:2px 15px;align-items:baseline;margin-top:5px}
-.x{cursor:pointer;border-bottom:1px dotted #4a5568}.x:hover,.x:focus-visible{border-bottom-color:var(--acc);outline:0}
+/* inline jargon inside prose: light touch */
+.x{cursor:pointer;border-bottom:1px dotted #6b7689}
+.x:hover,.x:focus-visible{border-bottom-color:var(--acc);color:var(--acc);outline:0}
+.x::after{content:"?";font-size:7.5px;font-weight:700;color:#8b95a6;vertical-align:super;margin-left:1px}
+.x:hover::after,.x:focus-visible::after{color:var(--acc)}
+/* pillar + score labels: real buttons, because these are the ones people need to click */
+.x.btn{display:inline-flex;align-items:center;gap:4px;border:1px solid #38425a;border-radius:5px;
+padding:2px 7px;background:#1b2130;border-color:#38425a;border-bottom-style:solid;line-height:1.3}
+.x.btn::after{content:"?";font-size:9px;vertical-align:baseline;margin:0;width:12px;height:12px;border-radius:50%;
+border:1px solid #4a5568;display:inline-flex;align-items:center;justify-content:center;color:#8b95a6;flex:none}
+.x.btn:hover,.x.btn:focus-visible{background:#28324a;border-color:var(--acc);color:inherit}
+.x.btn:hover::after,.x.btn:focus-visible::after{border-color:var(--acc);color:var(--acc)}
 #pop{position:fixed;inset:auto;margin:0;width:min(420px,calc(100vw - 16px));background:var(--card2);color:var(--tx);
 border:1px solid #3d4761;border-radius:8px;padding:9px 11px;font-size:11.5px;line-height:1.45;box-shadow:0 8px 24px #000a}
 #pop::backdrop{background:transparent}
@@ -113,6 +124,10 @@ dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
 @media(max-width:1080px){.cards{grid-template-columns:repeat(3,1fr)}.det{grid-template-columns:1fr 1fr}}
 @media(max-width:780px){.cards{grid-template-columns:1fr}.det{grid-template-columns:1fr}
 .sys{grid-template-columns:1fr 1fr}.sys .k,.sys .s{white-space:normal}.sys>div{border-left:0;border-top:1px solid var(--line)}.sys>div:nth-child(-n+2){border-top:0}}
+/* must come last: the base .pil .top rule is defined later in this sheet */
+#det .pil .top{justify-content:flex-start!important}
+#det .pil .top>*:first-child{margin-left:0!important}
+#det .pil .top>*:last-child{margin-left:auto!important}
 </style></head><body>
 <script type="application/json" id="D">__DATA__</script>
 <header>
@@ -196,7 +211,7 @@ test:'#4fc3c3',docs:'#6b7689',revert:'#ff6b6b',other:'#3d4761'};
 const f=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
 const pctf=v=>v.toFixed(0);
 // explain popovers: click any scored thing for what it is, the formula (read from meta, never transcribed), and this engineer's numbers
-const X=(k,h)=>`<span class="x" data-x="${k}" tabindex="0" role="button">${h}</span>`;
+const X=(k,h,c='')=>`<span class="x ${c}" data-x="${k}" tabindex="0" role="button">${h}</span>`;
 const dfn=s=>s.replace(/attention|top-decile|substantive/gi,w=>X(w.toLowerCase(),w));
 const SUB={distinct_helped:['engineers given a substantive review','engineers'],substantive_reviews:['substantive reviews','reviews'],
  core_files:[`shared-surface files touched (${M.core_file_min_authors}+ engineers each)`,'files'],co_engineers:['engineers co-editing those files','engineers'],
@@ -280,7 +295,7 @@ document.getElementById('cards').innerHTML=EN.slice(0,5).map((e,i)=>`
   <div class="chead"><img loading="lazy" src="https://github.com/${e.login}.png?size=68" alt="">
    <div style="min-width:0"><div class="nm">${e.login}</div>
    <div class="sc">${X('score',`<b>${pctf(e.score)}</b> impact`)}</div></div></div>
-  <div class="bars">${PL.map(([k,l,c])=>`<div class="br">${X(k,l)}
+  <div class="bars">${PL.map(([k,l,c])=>`<div class="br">${X(k,l,"btn")}
    <span class="tr"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
    <span style="text-align:right">${pctf(e.pillars[k])}<small>${ord(e.pillars[k])}</small></span></div>`).join('')}</div>
   <div class="hl">${dfn(e.why)}</div>
@@ -294,7 +309,7 @@ function detail(i){
  <div><h2><img src="https://github.com/${e.login}.png?size=44" style="width:22px;height:22px;border-radius:50%">
    <a href="https://github.com/${e.login}" target="_blank" rel="noopener">${e.login}</a>
    <span>rank #${EN.indexOf(e)+1} &middot; ${X('score','score '+pctf(e.score))} ${e.active[0]===M.window[0]&&e.active[1]===M.window[1]?'':` &middot; active ${e.active[0]} &rarr; ${e.active[1]}`}</span></h2>
-  ${PL.map(([k,l,c])=>`<div class="pil"><div class="top">${X(k,`<b style="color:var(--${c})">${l}</b>`)}
+  ${PL.map(([k,l,c])=>`<div class="pil"><div class="top">${X(k,`<b style="color:var(--${c})">${l}</b>`,"btn")}
     <span>${pctf(e.pillars[k])}<span style="color:var(--dim);font-size:10px">${ord(e.pillars[k])} pct</span></span></div>
     <span class="tr" style="display:block"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
     <div class="why">${dfn(why(e,k))}</div></div>`).join('')}
