@@ -24,8 +24,8 @@ It is also the reason this dashboard scores none of those things, and why "atten
 
 **Four pillars**, each a cohort percentile, combined 35/25/25/15:
 
-- **Review leverage (35%)** — distinct engineers whose PRs you reviewed, plus substantive (non-rubber-stamp) reviews. Bare approvals score zero. Measures the multiplier effect.
-- **Blast radius (25%)** — shared-surface files you touched (files ≥5 distinct engineers also touched) and distinct engineers co-editing them. A big diff in an isolated corner scores near zero.
+- **Review leverage (35%)** — distinct engineers you gave a *substantive* review, plus your count of substantive reviews. A bare approval is a rubber stamp: it scores zero and does not count as unblocking anyone. Measures the multiplier effect.
+- **Blast radius (25%)** — shared-surface files you touched: files that 5 or more distinct engineers also changed in the window. A big diff in an isolated corner scores near zero. Single term; see the deleted sub-metric below.
 - **Reviewed throughput (25%)** — merged work weighted by the human review attention it attracted (human reviewers, human inline review comments, human issue comments, all excluding the author), capped per PR so one flamewar can't carry someone. Named for what it measures, not "consequence": it still correlates rho=0.86 with merged-PR count (below).
 - **Work mix & load (15%)** — fix/perf share and breadth of work types. Credits the person keeping production healthy.
 
@@ -37,7 +37,7 @@ Every merged PR in `PostHog/posthog` for 2026-06-18 → 2026-09-16: **15,162 PRs
 
 File-level data comes from a treeless clone plus `git log --name-only`: **14,831 commits, 150,300 file touches**, joined to PR authorship via the `(#NNNNN)` squash reference. 99.7% of commits carry that reference; **90.0%** of all commits (13,351/14,831) resolve to a known human PR author, the rest belong to bot-authored or out-of-window PRs. This is more complete than the API's `files` connection, which truncates at 100 files, and it cost zero API calls.
 
-Of 230 total contributors, 158 clear the eligibility floor (≥3 merged PRs or ≥5 reviews); the page inlines the top 150 by score, so the bottom 8 eligible engineers are counted in the header stat but not individually rankable.
+Of 230 total contributors, 158 clear the eligibility floor (≥3 merged PRs or ≥5 reviews). All 158 are inlined and individually inspectable in the page.
 
 Dashboard is a single self-contained ~283 KB HTML file with the scored data inlined as JSON — no framework, no build step. It does still load engineer avatars from `github.com` after load, so it isn't fully offline.
 
@@ -55,7 +55,7 @@ I tried three times to engineer him out of the top slot and rejected all three, 
 
 ## What it cannot see — stated on the page, not buried
 
-**Volume still wins on the back door.** No pillar weights PR count, yet `corr(log(merged PRs), score) ≈ 0.89` across the 150 ranked engineers, because percentiles of per-PR sums are partly rank transforms of PR count. This is the biggest gap between what the model claims to measure and what it rewards.
+**Volume still wins on the back door.** No pillar weights PR count, yet `corr(log(merged PRs), score) ≈ 0.89` across the 158 ranked engineers, because percentiles of per-PR sums are partly rank transforms of PR count. This is the biggest gap between what the model claims to measure and what it rewards.
 
 *What I did about it:* attention originally counted *all* reviewers, threads and comments, including bots. Bots author roughly 71% of issue comments and over half of inline review comments in this repo, and AI reviewers comment roughly in proportion to diff size, so raw comment/thread totals were quietly letting lines-of-code back in through the pillar built to replace it. Attention now counts only human reviewers, human inline review comments and human issue comments, excluding the PR author. That dropped reviewed-throughput's correlation with PR count from 0.98 to 0.86 and the top-decile attention threshold from 6.5 to 2.5.
 
