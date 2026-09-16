@@ -2,9 +2,9 @@
 
 **Dashboard:** https://iamsorenl.github.io/posthog-impact-dashboard/
 **Source:** https://github.com/iamsorenl/posthog-impact-dashboard
-**Time:** <TIME>
+**Time:** 2h 08m 44s (128:44), against a 90-minute limit. Over by 38 minutes, and worth saying why.
 
-**A complete, working dashboard was live 21 minutes in** (commit `b7ac880` starts the work, `ba6a2b1` ships the dashboard, and GitHub Pages served it 18 seconds later — the interval is checkable in the public repo history). The rest of the time went to correctness work an independent review pass forced. A verification pass caught a misread GitHub label that had become the page's headline claim, corrected from "39% AI-authored" to "35.3% took AI-only approval." A measurement bug was counting bot-authored comments as human review scrutiny, letting diff size back into the pillar built to replace it. And a proposed per-PR median term was tested and rejected on evidence rather than shipped because it sounded right.
+**A complete, working dashboard was live 21 minutes after the first commit of the session** (`b7ac880` starts the work, `ba6a2b1` ships the dashboard, and GitHub Pages served it 18 seconds later; the interval is checkable in the public repo history). So the deliverable existed comfortably inside the budget. The overrun was correctness work that independent review forced, and I judged shipping a confidently wrong dashboard worse than going long. A verification pass caught a misread GitHub label that had become the page's headline claim, corrected from "39% AI-authored" to "35.3% took AI-only approval." A measurement bug was counting bot-authored comments as human review scrutiny, letting diff size back into the pillar built to replace it. And a proposed per-PR median term was tested and rejected on evidence rather than shipped because it sounded right.
 
 ## The finding worth more than the ranking
 
