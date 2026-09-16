@@ -7,66 +7,78 @@
 :root{--bg:#0e1117;--card:#161b24;--card2:#1c2230;--line:#262d3d;--tx:#e6edf3;--dim:#8b95a6;
 --lev:#6ea8fe;--bla:#d98cf5;--shi:#5fd48a;--wor:#f5b855;--acc:#ff8f5e}
 body{background:var(--bg);color:var(--tx);font:12.5px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-padding:10px 16px;max-width:1560px;margin:0 auto}
+padding:8px 16px;max-width:1560px;margin:0 auto}
 a{color:var(--lev);text-decoration:none}a:hover{text-decoration:underline}
-header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:12px}
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:7px;margin-bottom:8px}
 h1{font-size:17px;font-weight:650;letter-spacing:-.2px}
 .sub{color:var(--dim);font-size:11.5px}
 .sub b{color:var(--tx);font-weight:600}
 .btn{margin-left:auto;background:var(--card2);border:1px solid var(--line);color:var(--tx);
 padding:4px 11px;border-radius:6px;cursor:pointer;font-size:11.5px}
 .btn:hover{border-color:var(--dim)}
-.thesis{color:var(--dim);font-size:11.5px;margin:-4px 0 11px;line-height:1.5;max-width:1100px}
+.thesis{color:var(--dim);font-size:11.5px;margin:-2px 0 7px;line-height:1.4}
 .thesis b{color:var(--tx)}
 .flag{background:#2a1d12;border:1px solid #6b4423;border-left:3px solid var(--acc);border-radius:7px;
-padding:8px 11px;margin:0 0 9px;font-size:11.5px;color:#e8d5c4;line-height:1.5}
+padding:6px 11px;margin:0 0 6px;font-size:11px;color:#e8d5c4;line-height:1.4}
 .flag b{color:#ffcba4}.flag code{background:#0a0d13;padding:1px 4px;border-radius:3px}
 .ag{display:inline-block;background:#3a2a1a;color:#ffb380;border-radius:3px;padding:0 4px;font-size:9.5px;
 margin-left:4px;vertical-align:middle;font-weight:600}
-.agbar{font-size:10px;color:var(--dim);margin-top:5px}
+.agbar{font-size:10.5px;color:var(--dim);margin-top:4px}
 .cant{background:#12161f;border:1px solid var(--line);border-left:3px solid #4a5568;border-radius:7px;
-padding:7px 11px;margin-bottom:10px;font-size:10.5px;color:var(--dim);display:flex;flex-wrap:wrap;
-gap:3px 15px;align-items:baseline;line-height:1.45}
+padding:6px 11px;margin-bottom:8px;font-size:10.5px;color:var(--dim);display:flex;flex-wrap:wrap;
+gap:2px 15px;align-items:baseline;line-height:1.4}
 .cant>b{color:var(--tx);font-size:11px}
 .cant span b{color:#b8c2d0;font-weight:600}
 .cant s{color:#4a5568;text-decoration:none;margin-right:4px}
+/* repo-level system view: context, not the answer */
+.sys{display:grid;grid-template-columns:1.5fr repeat(4,1fr);border:1px solid var(--line);border-radius:7px;
+margin-bottom:8px;background:#10141c}
+.sys>div{padding:4px 11px 5px;border-left:1px solid var(--line);min-width:0}
+.sys>div:first-child{border-left:0}
+.sys .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--dim);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sys .v{font-size:15px;font-weight:650;line-height:1.3;white-space:nowrap}
+.sys .v small{font-size:10px;color:var(--dim);font-weight:500;margin-left:3px}
+.sys .s{font-size:10px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk{display:flex;align-items:flex-end;gap:2px;height:18px;flex:1;margin-bottom:3px}
+.wk i{display:block;flex:1;background:#3d4761;border-radius:1px 1px 0 0;min-height:2px}
 /* top 5 */
-.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
-.c{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px;cursor:pointer;
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:8px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 9px;cursor:pointer;
 transition:border-color .12s,transform .12s;position:relative}
 .c:hover{border-color:#3d4761;transform:translateY(-1px)}
 .c.on{border-color:var(--acc);background:var(--card2)}
-.chead{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.chead{display:flex;align-items:center;gap:8px;margin-bottom:5px}
 .chead img{width:34px;height:34px;border-radius:50%;background:var(--card2);flex:none}
 .rk{position:absolute;top:8px;right:9px;font-size:10px;color:var(--dim);font-weight:700}
 .nm{font-weight:650;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sc{font-size:11px;color:var(--dim)}
 .sc b{color:var(--acc);font-size:15px;font-weight:700}
-.bars{display:flex;flex-direction:column;gap:3px}
-.br{display:grid;grid-template-columns:52px 1fr 26px;align-items:center;gap:5px;font-size:10px;color:var(--dim)}
+.bars{display:flex;flex-direction:column;gap:2px}
+.br{display:grid;grid-template-columns:auto 1fr 34px;align-items:center;gap:5px;font-size:10.5px;color:var(--dim);white-space:nowrap}
+.br small{font-size:8.5px;margin-left:1px}
 .tr{display:block;height:5px;background:#0a0d13;border-radius:3px;overflow:hidden}
 .fl{display:block;height:100%;border-radius:3px}
-.hl{font-size:10.5px;color:var(--dim);margin-top:7px;padding-top:6px;border-top:1px solid var(--line);
-line-height:1.4;min-height:29px}
+.hl{font-size:10.5px;color:var(--dim);margin-top:5px;padding-top:5px;border-top:1px solid var(--line);line-height:1.4}
 .hl b{color:var(--tx)}
 /* detail */
-.det{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 14px;
+.det{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px 14px;
 display:grid;grid-template-columns:1.15fr 1.35fr 1fr;gap:18px}
 .det>div{min-width:0;overflow-x:auto}
-.det h2{font-size:13px;font-weight:650;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.det h2{font-size:13px;font-weight:650;margin-bottom:6px;display:flex;align-items:center;gap:7px}
 .det h2 span{color:var(--dim);font-weight:400;font-size:11px}
 .sec{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--dim);
 margin:0 0 6px;font-weight:650}
-.pil{margin-bottom:9px}
+.pil{margin-bottom:7px}
 .pil .top{display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px}
 .pil .top b{font-weight:600}
 .pil .why{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.4}
 .pil .why b{color:var(--tx);font-weight:600}
 table{width:100%;border-collapse:collapse;font-size:11px}
-td,th{padding:3px 5px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--dim);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+td,th{padding:2.5px 5px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
 td.n{text-align:right;color:var(--dim);white-space:nowrap}
-.ttl{display:block;max-width:330px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+td.t{max-width:0}.ttl{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dfn{border-bottom:1px dotted var(--dim);cursor:help}
 .fp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;direction:rtl;
 text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:230px;display:block}
 .mix{display:flex;height:7px;border-radius:4px;overflow:hidden;margin:4px 0 5px}
@@ -74,7 +86,7 @@ text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-wi
 .mixk{display:flex;flex-wrap:wrap;gap:3px 9px;font-size:10px;color:var(--dim)}
 .mixk s{width:7px;height:7px;border-radius:2px;display:inline-block;margin-right:3px;text-decoration:none}
 /* leaderboard */
-.lb{margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 14px;overflow-x:auto}
+.lb{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:11px 14px;overflow-x:auto}
 .lbh{display:flex;align-items:center;gap:10px;margin-bottom:7px}
 .pg{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dim)}
 .pg button{background:var(--card2);border:1px solid var(--line);color:var(--tx);border-radius:5px;
@@ -91,14 +103,16 @@ dialog h4{font-size:11.5px;margin:12px 0 4px;color:var(--acc)}
 dialog p,dialog li{color:#c3ccd9;margin-bottom:5px}dialog ul{padding-left:18px}
 dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
 @media(max-width:1080px){.cards{grid-template-columns:repeat(3,1fr)}.det{grid-template-columns:1fr 1fr}}
-@media(max-width:780px){.cards{grid-template-columns:1fr}.det{grid-template-columns:1fr}}
+@media(max-width:780px){.cards{grid-template-columns:1fr}.det{grid-template-columns:1fr}
+.sys{grid-template-columns:1fr 1fr}.sys .k,.sys .s{white-space:normal}.sys>div{border-left:0;border-top:1px solid var(--line)}.sys>div:nth-child(-n+2){border-top:0}}
 </style></head><body>
 <script type="application/json" id="D">__DATA__</script>
 <header>
   <h1>Five engineers whose fingerprints are all over the last 90 days</h1>
   <div class="sub" id="meta"></div>
-  <button class="btn" onclick="document.getElementById('m').showModal()">How this is calculated</button>
+  <button class="btn" onclick="openM()">How this is calculated</button>
 </header>
+<div class="sys" id="sys"></div>
 <div class="flag"><b>Why volume metrics fail at PostHog specifically:</b> <b id="agpct"></b> of merged PRs were
 approved by an AI reviewer instead of a full human review (the <code>stamphog</code> label &mdash; GitHub's own description:
 <i>"Request AI approval (no full review)"</i>). And five of the seven highest-volume reviewers in this repo are bots:
@@ -118,21 +132,21 @@ Each score is a cohort percentile that opens into the named PRs behind it. This 
 <span><s>&#9679;</s><b>Greenfield penalty.</b> Blast radius rewards crowded files, so anyone alone in a new product area scores low by construction.</span>
 <span><s>&#9679;</s><b>Volume still leaks in.</b> The composite correlates <b>&rho;=0.90</b> with merged-PR count
 even though PR count is weighted zero &mdash; percentiles of per-PR sums are partly rank transforms of PR count.
-Filtering bot comments out of "attention" cut this pillar from &rho;=0.98 to 0.86; it is reduced, not solved.</span>
+Filtering bot comments out of <span class="dfn" title="human reviewers + 0.5 per inline review thread + 0.25 per comment, excluding bots and the author">attention</span> cut this pillar from &rho;=0.98 to 0.86; it is reduced, not solved.</span>
 <span><s>&#9679;</s><b>Individual ranking is contested.</b> SPACE and DORA scope deliberately to teams, not people.
-<a href="#" onclick="document.getElementById('m').showModal();return false">Full methodology &amp; limits &rarr;</a></span></div>
+<a href="#" onclick="openM();return false">Full methodology &amp; limits &rarr;</a></span></div>
 <div class="det" id="det"></div>
 <div class="lb">
   <div class="lbh"><div class="sec" style="margin:0">Contributor leaderboard <span id="lbn" style="text-transform:none;letter-spacing:0;font-weight:400"></span></div>
     <div class="pg"><span id="pgi"></span>
       <button id="pv">&larr;</button><button id="nx">&rarr;</button></div></div>
   <table><thead><tr><th style="width:38px">#</th><th>Engineer</th><th style="width:58px">Score</th>
-  <th>Leverage</th><th>Blast radius</th><th>Shipping</th><th>Work mix</th>
+  <th>Leverage</th><th>Blast radius</th><th>Reviewed throughput</th><th>Work mix</th>
   <th class="n">Engineers<br>unblocked</th><th class="n" style="font-weight:400">Merged PRs<br><span style="text-transform:none;letter-spacing:0">(not scored)</span></th></tr></thead>
   <tbody id="lbb"></tbody></table>
 </div>
 
-<dialog id="m"><h3>Methodology &mdash; and what it deliberately ignores</h3>
+<dialog id="m"><h3 style="display:flex;align-items:center">Methodology &mdash; and what it deliberately ignores<button class="btn" onclick="document.getElementById('m').close()">Close</button></h3>
 <p><b>Data:</b> every merged pull request in <code>PostHog/posthog</code> over the 90 days
 <span id="mw"></span>, pulled from the GitHub GraphQL API one day at a time (so nothing is lost to the
 API's 1,000-result search cap), joined to the repo's git history for file-level data. Bot and automation
@@ -141,7 +155,7 @@ accounts are excluded from every figure.</p>
 <p>An earlier draft of this dashboard read the <code>stamphog</code> label as "AI-authored". That was wrong, and it is
 corrected here. GitHub's own label description is <i>"Request AI approval (no full review)"</i> &mdash; the PRs are written
 by named human engineers; the label means the author asked a bot to approve rather than waiting on a full human review.
-These PRs are counted normally and simply attract little human review attention, which the shipping pillar already
+These PRs are counted normally and simply attract little human review attention, which the Reviewed-throughput pillar already
 reflects without any special-casing.</p>
 <h4>Why not commits, lines or PR count?</h4>
 <p>All three reward volume and punish the senior engineer who spends the morning in review, or who
@@ -156,7 +170,12 @@ Distinct people, not review count, so reviewing one teammate 50 times does not l
 <li><b style="color:var(--bla)">Blast radius (25%)</b> &mdash; does your code land where others work? Half is the number of
 <i>shared-surface</i> files you touched (files <span id="mc"></span>+ distinct engineers also touched in the window);
 half is the count of distinct engineers who touch the same files as you. A big diff in an isolated corner
-scores near zero; a small diff in a hot path scores high.</li>
+scores near zero; a small diff in a hot path scores high.<br>
+The <i>"Shared code they own"</i> panel is display-only and ranks files differently: for each engineer we count how many
+times they changed each file in the window, divide by the square root of that file's total churn so busy files don't
+automatically win, and multiply by the log of how many engineers share the file. Files only one person ever touched are
+excluded, so the panel shows code an engineer repeatedly works on and shares with colleagues, not just the repo's most
+crowded files.</li>
 <li><b style="color:var(--shi)">Reviewed throughput (25%)</b> &mdash; your merged work weighted by the
 <i>attention it attracted</i>, not its size. Attention = distinct reviewers + 0.5&times;inline review threads
 + 0.25&times;comments. This uses the org's own scrutiny as the signal of consequence: a 2,000-line PR nobody
@@ -196,16 +215,20 @@ actual PRs behind every number.</p>
 <li>Scores are relative to this repo and this window, so they compare contributors to each other, not to an absolute bar.</li>
 <li>Eligibility floor (<span id="me"></span>) keeps one-off contributors from distorting the percentile base.</li>
 </ul>
-<p style="margin-top:12px"><button class="btn" style="margin:0" onclick="document.getElementById('m').close()">Close</button></p>
 </dialog>
 
 <script>
+function openM(){const m=document.getElementById('m');m.showModal();m.scrollTop=0;}
 const D=JSON.parse(document.getElementById('D').textContent),M=D.meta,EN=D.engineers;
 const PL=[['leverage','Leverage','lev'],['blast','Blast radius','bla'],['shipping','Reviewed throughput','shi'],['workmix','Work mix','wor']];
 const MIXC={feat:'#5fd48a',fix:'#f5b855',perf:'#6ea8fe',infra:'#d98cf5',refactor:'#8b95a6',
 test:'#4fc3c3',docs:'#6b7689',revert:'#ff6b6b',other:'#3d4761'};
 const f=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
 const pctf=v=>v.toFixed(0);
+const DFN={attention:`human reviewers + 0.5 per inline review thread + 0.25 per comment, all excluding bots and the author, capped at ${M.attention_cap} per PR`,
+ 'top-decile':`attention of ${M.attention_high_threshold}+, the top 10% of all ${f(M.merged_prs)} merged PRs`,
+ substantive:'a review that requested changes or carried inline comments; a bare approval counts for nothing'};
+const dfn=s=>s.replace(/attention|top-decile|substantive/gi,w=>`<span class="dfn" title="${DFN[w.toLowerCase()]}">${w}</span>`);
 const ord=v=>{const n=Math.round(v),t=n%10,h=n%100;
  return (t===1&&h!==11)?'st':(t===2&&h!==12)?'nd':(t===3&&h!==13)?'rd':'th';};
 
@@ -213,22 +236,31 @@ document.getElementById('meta').innerHTML=
  `<b>${M.window[0]}</b> to <b>${M.window[1]}</b> &middot; <b>${f(M.merged_prs)}</b> merged PRs &middot; `+
  `<b>${f(M.human_prs)}</b> by humans &middot; <b>${f(M.git_commits)}</b> commits across <b>${f(M.files_tracked)}</b> files &middot; `+
  `<b>${M.contributors_eligible}</b> eligible of ${M.contributors_total} contributors`;
+{const S=M.system,wk=S.weekly_merged,mx=Math.max(...wk),mn=Math.min(...wk),ra=S.review_activity,rt=ra.human+ra.bot,
+ fix=S.repo_mix.fix||0,feat=S.repo_mix.feat||0,d0=new Date(M.window[0]+'T00:00:00Z'),
+ pc=(a,b)=>Math.round(100*a/b)+'%';
+ document.getElementById('sys').innerHTML=`
+ <div><div class="k">Merged PRs &middot; by week</div>
+  <div style="display:flex;align-items:flex-end;gap:10px"><div class="v">${f(M.merged_prs)}</div>
+  <div class="wk" title="merged PRs per week, ${M.window[0]} to ${M.window[1]}">${wk.map((v,i)=>{const d=new Date(d0.getTime()+i*7*864e5).toISOString().slice(5,10);
+   return `<i style="height:${100*v/mx}%" title="week of ${d}: ${v} merged"></i>`;}).join('')}</div></div>
+  <div class="s">13 weeks &middot; ${f(mn)} to ${f(mx)} per week</div></div>
+ <div><div class="k">Median time to merge</div><div class="v">${S.median_merge_hours}<small>h</small></div>
+  <div class="s">first human review in ${S.median_first_human_review_hours}h &middot; ${pc(S.human_reviewed_prs,M.merged_prs)} of PRs get one</div></div>
+ <div><div class="k">Review activity by humans</div><div class="v">${pc(ra.human,rt)}</div>
+  <div class="s">${f(ra.human)} of ${f(rt)} reviews and comments</div></div>
+ <div><div class="k">Merged on AI-only approval</div><div class="v">${pc(M.ai_approved_prs,M.merged_prs)}</div>
+  <div class="s">${f(M.ai_approved_prs)} PRs carry the <code>stamphog</code> label</div></div>
+ <div><div class="k">Fix : feature</div><div class="v">${(fix/feat).toFixed(1)}<small>to 1</small></div>
+  <div class="s">${f(fix)} fixes, ${f(feat)} features, ${f(S.repo_mix.perf||0)} perf</div></div>`;}
 document.getElementById('agpct').textContent=Math.round(100*M.ai_approved_prs/M.merged_prs)+'% ('+f(M.ai_approved_prs)+' of '+f(M.merged_prs)+')';
 document.getElementById('mw').textContent=M.window[0]+' to '+M.window[1];
 document.getElementById('mc').textContent=M.core_file_min_authors;
 document.getElementById('me').textContent=M.eligibility;
-document.getElementById('lbn').textContent='— top '+EN.length+' of '+M.contributors_eligible+' eligible';
+document.getElementById('lbn').textContent='— all '+EN.length+' eligible contributors ('+M.eligibility.replace('>=',' \u2265').replace('>=',' \u2265')+')';
 var mc=document.getElementById('mcap');if(mc)mc.textContent=M.attention_cap;
 var mt=document.getElementById('mth');if(mt)mt.textContent=M.attention_high_threshold;
 
-// headline: the single most distinctive thing about this engineer
-function headline(e){
- const r=e.raw,p=e.pillars,best=PL.slice().sort((a,b)=>p[b[0]]-p[a[0]])[0][0];
- if(best==='leverage')return `Unblocked <b>${r.distinct_helped}</b> different engineers with <b>${f(r.substantive_reviews)}</b> substantive reviews`;
- if(best==='blast')return `Works in <b>${f(r.core_files)}</b> shared files, overlapping <b>${r.co_engineers}</b> other engineers`;
- if(best==='shipping')return `<b>${r.high_attention_prs}</b> PRs drew top-decile review scrutiny across <b>${r.merged}</b> merged`;
- return `<b>${Math.round(r.fixperf_share*100)}%</b> of ${r.merged} PRs are fixes or perf work, across <b>${r.type_breadth}</b> work types`;
-}
 function why(e,k){const r=e.raw;
  if(k==='leverage')return `<b>${r.distinct_helped}</b> distinct engineers reviewed &middot; <b>${f(r.substantive_reviews)}</b> substantive of ${f(r.reviews_given)} reviews`;
  if(k==='blast')return `<b>${f(r.core_files)}</b> shared-surface files of ${f(r.files_touched)} touched &middot; overlaps <b>${r.co_engineers}</b> engineers`;
@@ -245,8 +277,8 @@ document.getElementById('cards').innerHTML=EN.slice(0,5).map((e,i)=>`
    <div class="sc"><b>${pctf(e.score)}</b> impact</div></div></div>
   <div class="bars">${PL.map(([k,l,c])=>`<div class="br"><span>${l}</span>
    <span class="tr"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
-   <span style="text-align:right">${pctf(e.pillars[k])}</span></div>`).join('')}</div>
-  <div class="hl">${headline(e)}</div>
+   <span style="text-align:right">${pctf(e.pillars[k])}<small>${ord(e.pillars[k])}</small></span></div>`).join('')}</div>
+  <div class="hl">${dfn(e.why)}</div>
   <div class="agbar">${e.raw.fully_reviewed_prs} fully human-reviewed &middot; ${e.raw.ai_approved_prs} AI-approved (${Math.round(e.raw.ai_approved_share*100)}%)</div></div>`).join('');
 
 function detail(i){
@@ -256,24 +288,24 @@ function detail(i){
  document.getElementById('det').innerHTML=`
  <div><h2><img src="https://github.com/${e.login}.png?size=44" style="width:22px;height:22px;border-radius:50%">
    <a href="https://github.com/${e.login}" target="_blank" rel="noopener">${e.login}</a>
-   <span>rank #${EN.indexOf(e)+1} &middot; score ${pctf(e.score)} &middot; active ${e.active[0]} &rarr; ${e.active[1]}</span></h2>
+   <span>rank #${EN.indexOf(e)+1} &middot; score ${pctf(e.score)} ${e.active[0]===M.window[0]&&e.active[1]===M.window[1]?'':` &middot; active ${e.active[0]} &rarr; ${e.active[1]}`}</span></h2>
   ${PL.map(([k,l,c])=>`<div class="pil"><div class="top"><b style="color:var(--${c})">${l}</b>
     <span>${pctf(e.pillars[k])}<span style="color:var(--dim);font-size:10px">${ord(e.pillars[k])} pct</span></span></div>
     <span class="tr" style="display:block"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
-    <div class="why">${why(e,k)}</div></div>`).join('')}
+    <div class="why">${dfn(why(e,k))}</div></div>`).join('')}
   <div class="sec" style="margin-top:11px">Work mix &middot; ${tot} merged PRs</div>
   <div class="mix">${mix.map(([k,v])=>`<i style="width:${100*v/tot}%;background:${MIXC[k]||'#3d4761'}"></i>`).join('')}</div>
   <div class="mixk">${mix.map(([k,v])=>`<span><s style="background:${MIXC[k]||'#3d4761'}"></s>${k} ${v}</span>`).join('')}</div>
  </div>
  <div><div class="sec">Highest-scrutiny PRs &mdash; the evidence</div>
-  <table><thead><tr><th>PR</th><th>Reviewers</th><th class="n">Threads</th><th class="n">Attention</th></tr></thead><tbody>
-  ${e.top_prs.map(p=>`<tr><td><a class="ttl" href="https://github.com/PostHog/posthog/pull/${p.n}" target="_blank" rel="noopener" title="${p.t.replace(/"/g,'&quot;')}">#${p.n} ${p.t}</a>${p.ag?'<span class="ag" title="Author requested AI approval instead of full human review">AI-approved</span>':''}</td>
+  <table><thead><tr><th>PR</th><th>Reviewers</th><th class="n">Threads</th><th class="n">${dfn('Attention')}</th></tr></thead><tbody>
+  ${e.top_prs.map(p=>`<tr><td class="t"><a class="ttl" href="https://github.com/PostHog/posthog/pull/${p.n}" target="_blank" rel="noopener" title="${p.t.replace(/"/g,'&quot;')}">#${p.n} ${p.t}</a>${p.ag?'<span class="ag" title="Author requested AI approval instead of full human review">AI-approved</span>':''}</td>
    <td class="n" style="text-align:left">${p.r}</td><td class="n">${p.th}</td><td class="n">${p.a}</td></tr>`).join('')||'<tr><td colspan=4 style="color:var(--dim)">No merged PRs in window &mdash; scores here come from review leverage.</td></tr>'}
   </tbody></table></div>
  <div><div class="sec">Engineers they unblocked</div>
   <table><tbody>${e.reviewed.map(r=>`<tr><td><a href="https://github.com/${r.who}" target="_blank" rel="noopener">${r.who}</a></td><td class="n">${r.n} reviews</td></tr>`).join('')||'<tr><td style="color:var(--dim)">&mdash;</td></tr>'}</tbody></table>
-  <div class="sec" style="margin-top:11px">Shared surfaces they touch</div>
-  <table><tbody>${e.top_files.map(x=>`<tr><td><span class="fp" title="${x.f}">${x.f}</span></td><td class="n">${x.c} eng</td></tr>`).join('')||'<tr><td style="color:var(--dim)">&mdash;</td></tr>'}</tbody></table></div>`;
+  <div class="sec" style="margin-top:11px">Shared code they own</div>
+  <table><tbody>${e.top_files.map(x=>`<tr><td><span class="fp" title="${x.f}">${x.f}</span></td><td class="n">${x.n}&times; &middot; ${x.c} eng</td></tr>`).join('')||'<tr><td style="color:var(--dim)">&mdash;</td></tr>'}</tbody></table></div>`;
 }
 function pick(i){sel=i;document.querySelectorAll('.c').forEach(c=>c.classList.toggle('on',+c.dataset.i===i));detail(i);}
 document.getElementById('cards').addEventListener('click',ev=>{const c=ev.target.closest('.c');if(c)pick(+c.dataset.i);});
@@ -296,7 +328,7 @@ function draw(){
 document.getElementById('pv').onclick=()=>{if(pg>0){pg--;draw();}};
 document.getElementById('nx').onclick=()=>{if(pg<pages-1){pg++;draw();}};
 document.getElementById('lbb').addEventListener('click',ev=>{const r=ev.target.closest('tr.rowsel');
- if(r&&!ev.target.closest('a')){const i=+r.dataset.i;if(i<5)pick(i);else detail(i);
+ if(r&&!ev.target.closest('a')){pick(+r.dataset.i);
  document.getElementById('det').scrollIntoView({behavior:'smooth',block:'nearest'});}});
 detail(0);draw();
 </script></body></html>
