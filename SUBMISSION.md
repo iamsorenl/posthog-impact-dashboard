@@ -35,6 +35,16 @@ Dashboard is a single self-contained ~283 KB HTML file with the scored data inli
 
 **One sub-metric was deleted, not tuned.** Blast radius originally blended shared-surface files with a count of engineers co-editing them. That second term had almost no discriminating power: cohort median 128, with the top twenty engineers spanning just 138 to 169. In a monorepo, anyone active co-edits files with roughly 140 people, so it measured "do you work here" rather than impact while carrying 12.5% of every score. It was removed rather than reweighted. Blast radius is now a single term, shared-surface files, which has a median of 61 against a top-twenty range of 107 to 428.
 
+## Why the #1 result is what it is
+
+Gilbert09 tops the list with 2,414 merged PRs, and a reasonable first reaction is that this is a PR-count leaderboard wearing a percentile costume. Worth addressing directly, because it is the obvious objection.
+
+Strip out every AI-approved PR and he still has **994 fully human-reviewed PRs against 184 for the next ranked engineer** — 5.4x, on the subset that got real human scrutiny. He also has 77 top-decile-attention PRs and touches 410 shared-surface files. The volume is real, it is concentrated in the data warehouse, and it is reviewed.
+
+Where he scores poorly is review leverage: 25 substantive reviews, 11 engineers unblocked. He is a builder, not a multiplier, and the pillar breakdown says so on the card rather than hiding it.
+
+I tried three times to engineer him out of the top slot and rejected all three, because each was chosen by its effect on one account rather than on its merits. Independent review called that out, correctly. The residual volume sensitivity is disclosed instead: the composite correlates rho=0.90 with merged-PR count. That number is on the page, not in a footnote.
+
 ## What it cannot see — stated on the page, not buried
 
 **Volume still wins on the back door.** No pillar weights PR count, yet `corr(log(merged PRs), score) ≈ 0.89` across the 150 ranked engineers, because percentiles of per-PR sums are partly rank transforms of PR count. This is the biggest gap between what the model claims to measure and what it rewards.

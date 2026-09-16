@@ -25,9 +25,18 @@ padding:6px 11px;margin:0 0 6px;font-size:11px;color:#e8d5c4;line-height:1.4}
 margin-left:4px;vertical-align:middle;font-weight:600}
 .agbar{font-size:10.5px;color:var(--dim);margin-top:4px}
 .cant{background:#12161f;border:1px solid var(--line);border-left:3px solid #4a5568;border-radius:7px;
-padding:6px 11px;margin-bottom:8px;font-size:10.5px;color:var(--dim);display:flex;flex-wrap:wrap;
-gap:2px 15px;align-items:baseline;line-height:1.4}
-.cant>b{color:var(--tx);font-size:11px}
+padding:5px 11px;margin-bottom:8px;font-size:10.5px;color:var(--dim);line-height:1.4}
+.cant summary{cursor:pointer;list-style:none}.cant summary::-webkit-details-marker{display:none}
+.cant summary>b{color:var(--tx);font-size:11px}.cant summary u{text-decoration:none;color:var(--lev);margin-left:6px}
+.cant[open] summary u{display:none}.cant>div{display:flex;flex-wrap:wrap;gap:2px 15px;align-items:baseline;margin-top:5px}
+.x{cursor:pointer;border-bottom:1px dotted #4a5568}.x:hover,.x:focus-visible{border-bottom-color:var(--acc);outline:0}
+#pop{position:fixed;inset:auto;margin:0;width:min(420px,calc(100vw - 16px));background:var(--card2);color:var(--tx);
+border:1px solid #3d4761;border-radius:8px;padding:9px 11px;font-size:11.5px;line-height:1.45;box-shadow:0 8px 24px #000a}
+#pop::backdrop{background:transparent}
+#pop .ph{font-weight:650;margin-bottom:3px}#pop p{color:var(--dim);margin-bottom:5px}
+#pop code{display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;background:#0a0d13;
+padding:4px 6px;border-radius:4px;margin-bottom:4px;white-space:pre-wrap}
+#pop code.me{color:#ffcba4}#pop code b{color:var(--tx)}#pop .pn{font-size:10px;color:var(--dim)}
 .cant span b{color:#b8c2d0;font-weight:600}
 .cant s{color:#4a5568;text-decoration:none;margin-right:4px}
 /* repo-level system view: context, not the answer */
@@ -78,7 +87,6 @@ td,th{padding:2.5px 5px;text-align:left;border-bottom:1px solid var(--line);vert
 th{color:var(--dim);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
 td.n{text-align:right;color:var(--dim);white-space:nowrap}
 td.t{max-width:0}.ttl{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dfn{border-bottom:1px dotted var(--dim);cursor:help}
 .fp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;direction:rtl;
 text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:230px;display:block}
 .mix{display:flex;height:7px;border-radius:4px;overflow:hidden;margin:4px 0 5px}
@@ -113,29 +121,27 @@ dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
   <button class="btn" onclick="openM()">How this is calculated</button>
 </header>
 <div class="sys" id="sys"></div>
-<div class="flag"><b>Why volume metrics fail at PostHog specifically:</b> <b id="agpct"></b> of merged PRs were
-approved by an AI reviewer instead of a full human review (the <code>stamphog</code> label &mdash; GitHub's own description:
-<i>"Request AI approval (no full review)"</i>). And five of the seven highest-volume reviewers in this repo are bots:
-<code>stamphog</code> alone left <b>8,460</b> reviews, more than any human. Counting PRs or reviews here measures
-automation, not engineering &mdash; so this dashboard scores neither.</div>
-<p class="thesis">So impact here is <b>not</b> commits, lines, or PR count &mdash; all present in the data, all deliberately worth zero.
-It is four things a leader actually cares about: <b style="color:var(--lev)">how many teammates you unblock</b>,
-<b style="color:var(--bla)">whether your work lands on surfaces others depend on</b>,
-<b style="color:var(--shi)">how much human-reviewed work you actually land</b>, and
-<b style="color:var(--wor)">whether you carry the unglamorous fix/perf load</b>.
-Each score is a cohort percentile that opens into the named PRs behind it. This is <b>evidence to check, not a verdict to accept</b> &mdash; click any engineer and go falsify it.</p>
+<div class="flag"><b>Why volume metrics fail here:</b> <b id="agpct"></b> of merged PRs were approved by an AI reviewer
+instead of a full human review (the <code>stamphog</code> label), and five of the seven busiest reviewers are bots &mdash; <code>stamphog</code>
+alone left 8,460 reviews. So commits, lines, PR count and review count are all in the data and all score <b>zero</b>.</div>
+<p class="thesis">Four cohort percentiles instead. <b>Click any number</b> for what it means, the formula, and that engineer's own inputs;
+click any engineer for the PRs behind the score. <b>Evidence to check, not a verdict to accept.</b></p>
 <div class="cards" id="cards"></div>
-<div class="cant"><b>What this cannot see &mdash; read before trusting the ranking.</b>
+<details class="cant"><summary><b>What this cannot see:</b> glue work &middot; support rotation &middot; long-cycle work &middot; greenfield work
+&middot; volume still leaks in (&rho;=0.90 with PR count) &middot; individual ranking is contested by SPACE and DORA <u>details &#9662;</u></summary><div>
 <span><s>&#9679;</s><b>Glue work.</b> RFCs, design review, mentoring, unblocking in Slack: no PRs, no score.</span>
 <span><s>&#9679;</s><b>Support rotation.</b> A week on support hero produces near-zero PRs and real customer impact.</span>
 <span><s>&#9679;</s><b>Long-cycle work.</b> Eight weeks on a query-planner rewrite lands as one PR and scores at the floor.</span>
 <span><s>&#9679;</s><b>Greenfield penalty.</b> Blast radius rewards crowded files, so anyone alone in a new product area scores low by construction.</span>
 <span><s>&#9679;</s><b>Volume still leaks in.</b> The composite correlates <b>&rho;=0.90</b> with merged-PR count
 even though PR count is weighted zero &mdash; percentiles of per-PR sums are partly rank transforms of PR count.
-Filtering bot comments out of <span class="dfn" title="human reviewers + 0.5 per inline review thread + 0.25 per comment, excluding bots and the author">attention</span> cut this pillar from &rho;=0.98 to 0.86; it is reduced, not solved.</span>
-<span><s>&#9679;</s><b>Individual ranking is contested.</b> SPACE and DORA scope deliberately to teams, not people.
-<a href="#" onclick="openM();return false">Full methodology &amp; limits &rarr;</a></span></div>
+Filtering bot comments out of <span class="x" data-x="attention" tabindex="0" role="button">attention</span> cut this pillar from &rho;=0.98 to 0.86; it is reduced, not solved.</span>
+<span><s>&#9679;</s><b>Attention rewards contentiousness.</b> A PR with 40 comments may be badly designed rather than important; per-PR attention is capped at <span id="mcap"></span>, but the bias remains.</span>
+<span><s>&#9679;</s><b>New hires</b> are structurally disadvantaged by percentile scoring over a fixed window; scores are relative to this repo and window, not an absolute bar.</span>
+<span><s>&#9679;</s><b>Individual ranking is contested.</b> SPACE and DORA scope deliberately to teams, not people. Treat this as a prompt for conversation, not a rating.
+<a href="#" onclick="openM();return false">Data provenance &amp; rejected experiments &rarr;</a></span></div></details>
 <div class="det" id="det"></div>
+<div id="pop" popover></div>
 <div class="lb">
   <div class="lbh"><div class="sec" style="margin:0">Contributor leaderboard <span id="lbn" style="text-transform:none;letter-spacing:0;font-weight:400"></span></div>
     <div class="pg"><span id="pgi"></span>
@@ -146,50 +152,26 @@ Filtering bot comments out of <span class="dfn" title="human reviewers + 0.5 per
   <tbody id="lbb"></tbody></table>
 </div>
 
-<dialog id="m"><h3 style="display:flex;align-items:center">Methodology &mdash; and what it deliberately ignores<button class="btn" onclick="document.getElementById('m').close()">Close</button></h3>
+<dialog id="m"><h3 style="display:flex;align-items:center">Where the data comes from &mdash; and what was tested and rejected<button class="btn" onclick="document.getElementById('m').close()">Close</button></h3>
 <p><b>Data:</b> every merged pull request in <code>PostHog/posthog</code> over the 90 days
 <span id="mw"></span>, pulled from the GitHub GraphQL API one day at a time (so nothing is lost to the
 API's 1,000-result search cap), joined to the repo's git history for file-level data. Bot and automation
-accounts are excluded from every figure.</p>
+accounts are excluded from every figure. Every score is a percentile within the cohort of <span id="me"></span>;
+click any number on the page for its formula and that engineer's inputs.</p>
 <h4>What <code>stamphog</code> actually is</h4>
 <p>An earlier draft of this dashboard read the <code>stamphog</code> label as "AI-authored". That was wrong, and it is
 corrected here. GitHub's own label description is <i>"Request AI approval (no full review)"</i> &mdash; the PRs are written
 by named human engineers; the label means the author asked a bot to approve rather than waiting on a full human review.
 These PRs are counted normally and simply attract little human review attention, which the Reviewed-throughput pillar already
 reflects without any special-casing.</p>
-<h4>Why not commits, lines or PR count?</h4>
-<p>All three reward volume and punish the senior engineer who spends the morning in review, or who
-lands 40 lines in the query engine that unblock five teams. They are in the dataset for reference,
-but contribute <b>zero</b> to the score.</p>
-<h4>The four pillars</h4>
-<ul>
-<li><b style="color:var(--lev)">Review leverage (35%)</b> &mdash; the count of <i>distinct</i> engineers whose PRs you
-reviewed (60%) and your number of substantive reviews (40%). Substantive means
-<code>CHANGES_REQUESTED</code> or <code>COMMENTED</code>; a bare approval is a rubber stamp and scores nothing.
-Distinct people, not review count, so reviewing one teammate 50 times does not look like reviewing 50 teammates.</li>
-<li><b style="color:var(--bla)">Blast radius (25%)</b> &mdash; does your code land where others work? Half is the number of
-<i>shared-surface</i> files you touched (files <span id="mc"></span>+ distinct engineers also touched in the window);
-half is the count of distinct engineers who touch the same files as you. A big diff in an isolated corner
-scores near zero; a small diff in a hot path scores high.<br>
-The <i>"Shared code they own"</i> panel is display-only and ranks files differently: for each engineer we count how many
-times they changed each file in the window, divide by the square root of that file's total churn so busy files don't
-automatically win, and multiply by the log of how many engineers share the file. Files only one person ever touched are
-excluded, so the panel shows code an engineer repeatedly works on and shares with colleagues, not just the repo's most
-crowded files.</li>
-<li><b style="color:var(--shi)">Reviewed throughput (25%)</b> &mdash; your merged work weighted by the
-<i>attention it attracted</i>, not its size. Attention = distinct reviewers + 0.5&times;inline review threads
-+ 0.25&times;comments. This uses the org's own scrutiny as the signal of consequence: a 2,000-line PR nobody
-read scores below a 20-line PR that five engineers argued over.</li>
-<li><b style="color:var(--wor)">Work mix &amp; load (15%)</b> &mdash; share of your PRs that are fixes or performance
-work (60%) plus the breadth of work types you cover (40%). Credits the person keeping production healthy,
-which feature-count metrics systematically miss.</li>
-</ul>
-<h4>What "attention" counts &mdash; and what it used to count</h4>
+<h4>Volume still leaks in</h4>
 <p>Bots author <b>71%</b> of issue comments and over half of inline review comments in this repo, and AI reviewers
 comment roughly in proportion to diff size. An earlier version counted raw comment and thread totals, which quietly
 let lines-of-code back in through the pillar built to replace it. Attention now counts only <b>human</b> reviewers,
 human inline review comments and human issue comments, all excluding the PR author. That dropped the top-decile
-threshold from 6.5 to <span id="mth"></span> and this pillar's correlation with PR count from 0.98 to 0.86.</p>
+threshold from 6.5 to <span id="mth"></span> and this pillar's correlation with PR count from 0.98 to 0.86. The composite still
+correlates <b>&rho;=0.90</b> with merged-PR count, because percentiles of per-PR sums are partly rank transforms of PR count.
+It is reduced, not solved.</p>
 <h4>A change that was tested and rejected</h4>
 <p>To blunt the remaining volume sensitivity we tested adding <i>median attention per PR</i> as a density term.
 It was rejected on the evidence: it takes only 26 distinct values across 154 engineers (so one comment on one PR can
@@ -197,24 +179,10 @@ swing a score more than the gap between 1st and 3rd), correlates just &minus;0.2
 largest beneficiaries are engineers with two to five PRs. It also penalises requesting AI approval on trivial
 changes, which is PostHog's own documented triage. Peak-based and reweighting alternatives were tested too and
 changed almost nothing. The honest conclusion was to fix the input rather than add a statistic, and to state the
-residual bias plainly above.</p>
-<h4>Scoring</h4>
-<p>Each sub-metric is converted to a <b>percentile within this 90-day cohort</b>, so "78" means
-"higher than 78% of eligible contributors on that dimension" &mdash; not an arbitrary point total.
-Pillars combine 35/25/25/15 into the final score. Click any engineer to see the raw counts and the
-actual PRs behind every number.</p>
-<h4>Honest limitations</h4>
-<ul>
-<li><b>Glue work is invisible.</b> Incident response, the support-hero rotation, design review, RFCs, mentoring and unblocking in Slack produce no PRs. Tanya Reilly's <i>Being Glue</i> describes exactly the contributor this dashboard cannot see.</li>
-<li><b>Long-cycle work is penalised.</b> Eight weeks rewriting a query planner lands as one or two PRs and scores near the floor.</li>
-<li><b>Greenfield is penalised.</b> Blast radius rewards crowded files, so an engineer alone in a new product area scores low by construction &mdash; and a well-factored isolated module looks like low impact when it is good design.</li>
-<li><b>Attention rewards contentiousness.</b> A PR with 40 comments may be badly designed rather than important; per-PR attention is capped at <span id="mcap"></span> to blunt this, but the bias remains.</li>
-<li><b>New hires</b> are structurally disadvantaged by percentile scoring over a fixed 90-day window.</li>
-<li>Research (SPACE, Forsgren et al. 2021; DORA; Deming) is consistent that individual ranking on delivery telemetry is unsound &mdash; these frameworks are deliberately scoped to teams and systems. Treat this as a prompt for conversation, not a performance rating.</li>
-<li>Blast radius uses 90-day co-editing as a proxy for architectural centrality, not real dependency analysis.</li>
-<li>Scores are relative to this repo and this window, so they compare contributors to each other, not to an absolute bar.</li>
-<li>Eligibility floor (<span id="me"></span>) keeps one-off contributors from distorting the percentile base.</li>
-</ul>
+residual bias plainly on the page.</p>
+<p>Research (SPACE, Forsgren et al. 2021; DORA; Deming) is consistent that individual ranking on delivery telemetry is unsound;
+those frameworks are deliberately scoped to teams and systems. Blast radius uses 90-day co-editing as a proxy for architectural
+centrality, not real dependency analysis.</p>
 </dialog>
 
 <script>
@@ -225,10 +193,46 @@ const MIXC={feat:'#5fd48a',fix:'#f5b855',perf:'#6ea8fe',infra:'#d98cf5',refactor
 test:'#4fc3c3',docs:'#6b7689',revert:'#ff6b6b',other:'#3d4761'};
 const f=n=>n>=1000?(n/1000).toFixed(1)+'k':n;
 const pctf=v=>v.toFixed(0);
-const DFN={attention:`human reviewers + 0.5 per inline review thread + 0.25 per comment, all excluding bots and the author, capped at ${M.attention_cap} per PR`,
- 'top-decile':`attention of ${M.attention_high_threshold}+, the top 10% of all ${f(M.merged_prs)} merged PRs`,
- substantive:'a review that requested changes or carried inline comments; a bare approval counts for nothing'};
-const dfn=s=>s.replace(/attention|top-decile|substantive/gi,w=>`<span class="dfn" title="${DFN[w.toLowerCase()]}">${w}</span>`);
+// explain popovers: click any scored thing for what it is, the formula (read from meta, never transcribed), and this engineer's numbers
+const X=(k,h)=>`<span class="x" data-x="${k}" tabindex="0" role="button">${h}</span>`;
+const dfn=s=>s.replace(/attention|top-decile|substantive/gi,w=>X(w.toLowerCase(),w));
+const SUB={distinct_helped:['engineers given a substantive review','engineers'],substantive_reviews:['substantive reviews','reviews'],
+ core_files:[`shared-surface files touched (${M.core_file_min_authors}+ engineers each)`,'files'],co_engineers:['engineers co-editing those files','engineers'],
+ attention_sum:['attention summed over merged PRs','attention'],high_attention_prs:['top-decile PRs','PRs'],
+ fixperf_share:['share of PRs that are fix or perf','fix/perf'],type_breadth:['work types covered','types']};
+const rawv=(e,m)=>m==='fixperf_share'?Math.round(100*e.raw[m])+' % fix/perf':f(e.raw[m])+' '+SUB[m][1];
+const wx=w=>w===1?'':w+' × ';
+const WHAT={leverage:'How many different teammates you actually unblocked in review, not how many approve buttons you pressed.',
+ blast:'Whether your code lands where other people work: files many engineers change, not isolated corners.',
+ shipping:'How much human-reviewed work you landed, weighted by the scrutiny each PR drew rather than its size.',
+ workmix:'Whether you carry the unglamorous fix and performance load, across a breadth of work types.',
+ score:'The weighted blend of the four pillar percentiles.',
+ attention:"How much human scrutiny one PR drew: the org's own signal of consequence, independent of diff size.",
+ 'top-decile':'A PR whose attention is in the top 10% of every merged PR in the window.',
+ substantive:'A review that did real work. A bare approval is a rubber stamp and counts for nothing.'};
+function explain(k,e){
+ const r=e.raw,W=M.weights,F=M.pillar_formula,PN=Object.fromEntries(PL.map(([k,l])=>[k,l]));
+ let head,how,yours,pn=`<div class="pn">pct = percentile among ${M.contributors_eligible} eligible engineers</div>`;
+ if(F[k]){head=`${PN[k]} &middot; ${Math.round(W[k]*100)}% of score`;
+  how=F[k].map(([m,w])=>`${wx(w)}pct(${SUB[m][0]})`).join(' + ');
+  yours=F[k].map(([m,w])=>`${wx(w)}${pctf(e.pcts[m])} (${rawv(e,m)})`).join(' + ')+` = ${pctf(e.pillars[k])}${ord(e.pillars[k])} pct`;}
+ else if(k==='score'){head='Impact score';how=PL.map(([q,l])=>`${W[q]} × ${l}`).join(' + ');
+  yours=PL.map(([q])=>`${W[q]} × ${pctf(e.pillars[q])}`).join(' + ')+` = ${pctf(e.score)}`;}
+ else if(k==='attention'){head='Attention (per PR)';pn='';how=`min(human reviewers + 0.5 × inline review threads + 0.25 × issue comments, ${M.attention_cap})`;
+  const p=e.top_prs[0];yours=p?`#${p.n}: min(${p.r} + 0.5 × ${p.th} + 0.25 × ${p.c}, ${M.attention_cap}) = ${p.a}; summed over ${f(r.merged)} PRs = ${f(r.attention_sum)}`:'no merged PRs in window';}
+ else if(k==='top-decile'){head='Top-decile PR';pn='';how=`attention ≥ ${M.attention_high_threshold} (90th percentile of all ${f(M.merged_prs)} merged PRs)`;yours=`${r.high_attention_prs} of ${f(r.merged)} merged PRs qualify`;}
+ else{head='Substantive review';pn='';how='state = CHANGES_REQUESTED, or ≥ 1 inline comment';yours=`${f(r.substantive_reviews)} of ${f(r.reviews_given)} reviews given (${f(r.reviews_given-r.substantive_reviews)} bare approvals)`;}
+ return `<div class="ph">${head}</div><p>${WHAT[k]}</p><code>${how}</code><code class="me"><b>${e.login}</b>: ${yours}</code>${pn}`;
+}
+const pop=document.getElementById('pop');let cur=0;
+function show(t){const c=t.closest('.c'),e=c?EN[+c.dataset.i]:EN[cur];
+ if(pop.matches(':popover-open'))pop.hidePopover();
+ pop.innerHTML=explain(t.dataset.x,e);pop.showPopover();
+ const r=t.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;
+ pop.style.left=Math.max(8,Math.min(r.left,innerWidth-w-8))+'px';
+ pop.style.top=(r.bottom+6+h>innerHeight&&r.top-6-h>=0?r.top-6-h:r.bottom+6)+'px';}
+document.addEventListener('click',ev=>{const t=ev.target.closest('[data-x]');if(t){ev.preventDefault();show(t);}});
+document.addEventListener('keydown',ev=>{const t=ev.target;if((ev.key==='Enter'||ev.key===' ')&&t.dataset&&t.dataset.x){ev.preventDefault();show(t);}});
 const ord=v=>{const n=Math.round(v),t=n%10,h=n%100;
  return (t===1&&h!==11)?'st':(t===2&&h!==12)?'nd':(t===3&&h!==13)?'rd':'th';};
 
@@ -255,15 +259,14 @@ document.getElementById('meta').innerHTML=
   <div class="s">${f(fix)} fixes, ${f(feat)} features, ${f(S.repo_mix.perf||0)} perf</div></div>`;}
 document.getElementById('agpct').textContent=Math.round(100*M.ai_approved_prs/M.merged_prs)+'% ('+f(M.ai_approved_prs)+' of '+f(M.merged_prs)+')';
 document.getElementById('mw').textContent=M.window[0]+' to '+M.window[1];
-document.getElementById('mc').textContent=M.core_file_min_authors;
-document.getElementById('me').textContent=M.eligibility;
-document.getElementById('lbn').textContent='— all '+EN.length+' eligible contributors ('+M.eligibility.replace('>=',' \u2265').replace('>=',' \u2265')+')';
+document.getElementById('me').textContent=M.contributors_eligible+' engineers eligible by '+M.eligibility.replace(/>=/g,' \u2265 ');
+document.getElementById('lbn').textContent='— all '+EN.length+' eligible contributors ('+M.eligibility.replace(/>=/g,' \u2265 ')+')';
 var mc=document.getElementById('mcap');if(mc)mc.textContent=M.attention_cap;
 var mt=document.getElementById('mth');if(mt)mt.textContent=M.attention_high_threshold;
 
 function why(e,k){const r=e.raw;
  if(k==='leverage')return `<b>${r.distinct_helped}</b> distinct engineers reviewed &middot; <b>${f(r.substantive_reviews)}</b> substantive of ${f(r.reviews_given)} reviews`;
- if(k==='blast')return `<b>${f(r.core_files)}</b> shared-surface files of ${f(r.files_touched)} touched &middot; overlaps <b>${r.co_engineers}</b> engineers`;
+ if(k==='blast')return `<b>${f(r.core_files)}</b> shared-surface files of ${f(r.files_touched)} touched &middot; co-edits with ${r.co_engineers} engineers (not scored)`;
  if(k==='shipping')return `<b>${f(r.attention_sum)}</b> attention over <b>${r.merged}</b> merged PRs &middot; <b>${r.high_attention_prs}</b> top-decile &middot; ${r.ai_approved_prs} took AI-only approval`;
  return `<b>${Math.round(r.fixperf_share*100)}%</b> fix/perf &middot; <b>${r.type_breadth}</b> distinct work types`;
 }
@@ -274,22 +277,22 @@ document.getElementById('cards').innerHTML=EN.slice(0,5).map((e,i)=>`
   <div class="rk">#${i+1}</div>
   <div class="chead"><img loading="lazy" src="https://github.com/${e.login}.png?size=68" alt="">
    <div style="min-width:0"><div class="nm">${e.login}</div>
-   <div class="sc"><b>${pctf(e.score)}</b> impact</div></div></div>
-  <div class="bars">${PL.map(([k,l,c])=>`<div class="br"><span>${l}</span>
+   <div class="sc">${X('score',`<b>${pctf(e.score)}</b> impact`)}</div></div></div>
+  <div class="bars">${PL.map(([k,l,c])=>`<div class="br">${X(k,l)}
    <span class="tr"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
    <span style="text-align:right">${pctf(e.pillars[k])}<small>${ord(e.pillars[k])}</small></span></div>`).join('')}</div>
   <div class="hl">${dfn(e.why)}</div>
   <div class="agbar">${e.raw.fully_reviewed_prs} fully human-reviewed &middot; ${e.raw.ai_approved_prs} AI-approved (${Math.round(e.raw.ai_approved_share*100)}%)</div></div>`).join('');
 
 function detail(i){
- const e=EN[i];if(!e)return;
+ const e=EN[i];if(!e)return;cur=i;
  const tot=Object.values(e.mix).reduce((a,b)=>a+b,0)||1;
  const mix=Object.entries(e.mix).sort((a,b)=>b[1]-a[1]);
  document.getElementById('det').innerHTML=`
  <div><h2><img src="https://github.com/${e.login}.png?size=44" style="width:22px;height:22px;border-radius:50%">
    <a href="https://github.com/${e.login}" target="_blank" rel="noopener">${e.login}</a>
-   <span>rank #${EN.indexOf(e)+1} &middot; score ${pctf(e.score)} ${e.active[0]===M.window[0]&&e.active[1]===M.window[1]?'':` &middot; active ${e.active[0]} &rarr; ${e.active[1]}`}</span></h2>
-  ${PL.map(([k,l,c])=>`<div class="pil"><div class="top"><b style="color:var(--${c})">${l}</b>
+   <span>rank #${EN.indexOf(e)+1} &middot; ${X('score','score '+pctf(e.score))} ${e.active[0]===M.window[0]&&e.active[1]===M.window[1]?'':` &middot; active ${e.active[0]} &rarr; ${e.active[1]}`}</span></h2>
+  ${PL.map(([k,l,c])=>`<div class="pil"><div class="top">${X(k,`<b style="color:var(--${c})">${l}</b>`)}
     <span>${pctf(e.pillars[k])}<span style="color:var(--dim);font-size:10px">${ord(e.pillars[k])} pct</span></span></div>
     <span class="tr" style="display:block"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
     <div class="why">${dfn(why(e,k))}</div></div>`).join('')}
@@ -298,7 +301,7 @@ function detail(i){
   <div class="mixk">${mix.map(([k,v])=>`<span><s style="background:${MIXC[k]||'#3d4761'}"></s>${k} ${v}</span>`).join('')}</div>
  </div>
  <div><div class="sec">Highest-scrutiny PRs &mdash; the evidence</div>
-  <table><thead><tr><th>PR</th><th>Reviewers</th><th class="n">Threads</th><th class="n">${dfn('Attention')}</th></tr></thead><tbody>
+  <table><thead><tr><th>PR</th><th>Reviewers</th><th class="n">Threads</th><th class="n">${X('attention','Attention')}</th></tr></thead><tbody>
   ${e.top_prs.map(p=>`<tr><td class="t"><a class="ttl" href="https://github.com/PostHog/posthog/pull/${p.n}" target="_blank" rel="noopener" title="${p.t.replace(/"/g,'&quot;')}">#${p.n} ${p.t}</a>${p.ag?'<span class="ag" title="Author requested AI approval instead of full human review">AI-approved</span>':''}</td>
    <td class="n" style="text-align:left">${p.r}</td><td class="n">${p.th}</td><td class="n">${p.a}</td></tr>`).join('')||'<tr><td colspan=4 style="color:var(--dim)">No merged PRs in window &mdash; scores here come from review leverage.</td></tr>'}
   </tbody></table></div>
