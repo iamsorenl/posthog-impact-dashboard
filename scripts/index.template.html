@@ -99,10 +99,11 @@ dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
   <div class="sub" id="meta"></div>
   <button class="btn" onclick="document.getElementById('m').showModal()">How this is calculated</button>
 </header>
-<div class="flag"><b>Why PR counts are worthless here:</b> <b id="agpct"></b> of merged PRs in this window are
-authored by PostHog's own AI agent (<code>stamphog</code>) and merged under a human's account &mdash; one account merged
-<b>121 in a single day</b>. Any metric built on PR or commit volume is now measuring agent throughput, not engineering.
-Agent-authored PRs are counted and shown, but <b>excluded from the shipping pillar</b>.</div>
+<div class="flag"><b>Why volume metrics fail at PostHog specifically:</b> <b id="agpct"></b> of merged PRs were
+approved by an AI reviewer instead of a full human review (the <code>stamphog</code> label &mdash; GitHub's own description:
+<i>"Request AI approval (no full review)"</i>). And six of the seven highest-volume reviewers in this repo are bots:
+<code>stamphog</code> alone left <b>8,460</b> reviews, more than any human. Counting PRs or reviews here measures
+automation, not engineering &mdash; so this dashboard scores neither.</div>
 <p class="thesis">So impact here is <b>not</b> commits, lines, or PR count &mdash; all present in the data, all deliberately worth zero.
 It is four things a leader actually cares about: <b style="color:var(--lev)">how many teammates you unblock</b>,
 <b style="color:var(--bla)">whether your work lands on surfaces others depend on</b>,
@@ -133,6 +134,12 @@ Each score is a cohort percentile that opens into the named PRs behind it. This 
 <span id="mw"></span>, pulled from the GitHub GraphQL API one day at a time (so nothing is lost to the
 API's 1,000-result search cap), joined to the repo's git history for file-level data. Bot and automation
 accounts are excluded from every figure.</p>
+<h4>What <code>stamphog</code> actually is</h4>
+<p>An earlier draft of this dashboard read the <code>stamphog</code> label as "AI-authored". That was wrong, and it is
+corrected here. GitHub's own label description is <i>"Request AI approval (no full review)"</i> &mdash; the PRs are written
+by named human engineers; the label means the author asked a bot to approve rather than waiting on a full human review.
+These PRs are counted normally and simply attract little human review attention, which the shipping pillar already
+reflects without any special-casing.</p>
 <h4>Why not commits, lines or PR count?</h4>
 <p>All three reward volume and punish the senior engineer who spends the morning in review, or who
 lands 40 lines in the query engine that unblock five teams. They are in the dataset for reference,
@@ -187,7 +194,7 @@ document.getElementById('meta').innerHTML=
  `<b>${M.window[0]}</b> to <b>${M.window[1]}</b> &middot; <b>${f(M.merged_prs)}</b> merged PRs &middot; `+
  `<b>${f(M.human_prs)}</b> by humans &middot; <b>${f(M.git_commits)}</b> commits across <b>${f(M.files_tracked)}</b> files &middot; `+
  `<b>${M.contributors_eligible}</b> eligible of ${M.contributors_total} contributors`;
-document.getElementById('agpct').textContent=Math.round(100*M.agent_labelled_prs/M.merged_prs)+'% ('+f(M.agent_labelled_prs)+' of '+f(M.merged_prs)+')';
+document.getElementById('agpct').textContent=Math.round(100*M.ai_approved_prs/M.merged_prs)+'% ('+f(M.ai_approved_prs)+' of '+f(M.merged_prs)+')';
 document.getElementById('mw').textContent=M.window[0]+' to '+M.window[1];
 document.getElementById('mc').textContent=M.core_file_min_authors;
 document.getElementById('me').textContent=M.eligibility;
@@ -204,7 +211,7 @@ function headline(e){
 function why(e,k){const r=e.raw;
  if(k==='leverage')return `<b>${r.distinct_helped}</b> distinct engineers reviewed &middot; <b>${f(r.substantive_reviews)}</b> substantive of ${f(r.reviews_given)} reviews`;
  if(k==='blast')return `<b>${f(r.core_files)}</b> shared-surface files of ${f(r.files_touched)} touched &middot; overlaps <b>${r.co_engineers}</b> engineers`;
- if(k==='shipping')return `<b>${f(r.attention_sum)}</b> attention over <b>${r.human_prs}</b> human-authored PRs &middot; <b>${r.high_attention_prs}</b> top-decile &middot; ${r.agent_prs} agent PRs excluded`;
+ if(k==='shipping')return `<b>${f(r.attention_sum)}</b> attention over <b>${r.merged}</b> merged PRs &middot; <b>${r.high_attention_prs}</b> top-decile &middot; ${r.ai_approved_prs} took AI-only approval`;
  return `<b>${Math.round(r.fixperf_share*100)}%</b> fix/perf &middot; <b>${r.type_breadth}</b> distinct work types`;
 }
 
@@ -219,7 +226,7 @@ document.getElementById('cards').innerHTML=EN.slice(0,5).map((e,i)=>`
    <span class="tr"><i class="fl" style="width:${e.pillars[k]}%;background:var(--${c})"></i></span>
    <span style="text-align:right">${pctf(e.pillars[k])}</span></div>`).join('')}</div>
   <div class="hl">${headline(e)}</div>
-  <div class="agbar">${e.raw.human_prs} human PRs &middot; ${e.raw.agent_prs} agent-authored (${Math.round(e.raw.agent_share*100)}%)</div></div>`).join('');
+  <div class="agbar">${e.raw.fully_reviewed_prs} fully human-reviewed &middot; ${e.raw.ai_approved_prs} AI-approved (${Math.round(e.raw.ai_approved_share*100)}%)</div></div>`).join('');
 
 function detail(i){
  const e=EN[i];if(!e)return;
@@ -239,7 +246,7 @@ function detail(i){
  </div>
  <div><div class="sec">Highest-scrutiny PRs &mdash; the evidence</div>
   <table><thead><tr><th>PR</th><th>Reviewers</th><th class="n">Threads</th><th class="n">Attention</th></tr></thead><tbody>
-  ${e.top_prs.map(p=>`<tr><td><a class="ttl" href="https://github.com/PostHog/posthog/pull/${p.n}" target="_blank" rel="noopener" title="${p.t.replace(/"/g,'&quot;')}">#${p.n} ${p.t}</a>${p.ag?'<span class="ag">agent</span>':''}</td>
+  ${e.top_prs.map(p=>`<tr><td><a class="ttl" href="https://github.com/PostHog/posthog/pull/${p.n}" target="_blank" rel="noopener" title="${p.t.replace(/"/g,'&quot;')}">#${p.n} ${p.t}</a>${p.ag?'<span class="ag" title="Author requested AI approval instead of full human review">AI-approved</span>':''}</td>
    <td class="n" style="text-align:left">${p.r}</td><td class="n">${p.th}</td><td class="n">${p.a}</td></tr>`).join('')||'<tr><td colspan=4 style="color:var(--dim)">No merged PRs in window &mdash; scores here come from review leverage.</td></tr>'}
   </tbody></table></div>
  <div><div class="sec">Engineers they unblocked</div>

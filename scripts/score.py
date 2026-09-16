@@ -6,16 +6,20 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW = os.path.join(ROOT, "data", "raw")
 WINDOW = ("2026-06-18", "2026-09-16")
 
-BOT_RE = re.compile(r"\[bot\]$|dependabot|renovate|github-actions|scheduled-actions|^posthog$|-bot$|^bot-"
-                    r"|greptile|trunk-io|coderabbit|sourcery|codecov|sentry-io|snyk|imgbot|netlify|vercel"
-                    r"|allcontributors|stale|mergify|semantic-release|posthog-contributions", re.I)
+BOT_RE = re.compile(
+    r"\[bot\]$|dependabot|renovate|github-actions|scheduled-actions|^posthog$|-bot$|^bot-"
+    r"|greptile|trunk-io|coderabbit|sourcery|codecov|sentry-io|snyk|imgbot|netlify|vercel"
+    r"|allcontributors|stale|mergify|semantic-release"
+    # AI review/approval accounts verified against this repo's own review volume
+    r"|^stamphog$|veria-ai|parameterai|chatgpt-codex|codex-connector|copilot|graphite-app"
+    r"|mendral|-ai$|-app$|-apps$", re.I)
 PR_IN_SUBJECT = re.compile(r"\(#(\d+)\)")
 
 WEIGHTS = {"leverage": 0.35, "blast": 0.25, "shipping": 0.25, "workmix": 0.15}
 MIN_PRS, MIN_REVIEWS = 3, 5          # eligibility floor
 ATT_CAP = 15.0                       # per-PR attention ceiling: contentiousness != consequence
 CORE_FILE_MIN_AUTHORS = 5            # a file >=5 distinct engineers touched is a shared surface
-AGENT_LABELS = {"stamphog", "skip-agent-review"}   # PostHog AI-agent-authored PRs
+AI_APPROVAL_LABEL = "stamphog"   # GitHub label desc: "Request AI approval (no full review)"
 
 
 def is_bot(login, typename=None):
@@ -130,20 +134,19 @@ for p in prs:
     all_attention.append(attention)
 
     labels = [l["name"] for l in p["labels"]["nodes"]]
-    agent = bool(AGENT_LABELS & set(labels))
+    ai_approved = AI_APPROVAL_LABEL in labels   # skipped full human review
     if author_ok:
         e = E[author]
         e["merged"] += 1
-        if agent:
+        if ai_approved:
             e["agent"] += 1
-        else:
-            e["attention_sum"] += attention   # agent-authored output is not the human's shipping judgment
+        e["attention_sum"] += attention
         e["reviewers_received"] |= distinct_reviewers
         e["mix"][classify(p["title"], labels)] += 1
         e["top_prs"].append({
             "n": p["number"], "t": p["title"][:120], "a": round(attention, 1),
             "r": len(distinct_reviewers), "th": threads, "c": comments,
-            "d": (p["mergedAt"] or "")[:10], "ag": 1 if agent else 0,
+            "d": (p["mergedAt"] or "")[:10], "ag": 1 if ai_approved else 0,
         })
         d = (p["mergedAt"] or "")[:10]
         e["first_seen"] = min(e["first_seen"] or d, d)
@@ -162,7 +165,7 @@ for p in prs:
 
 ATT_HIGH = statistics.quantiles(all_attention, n=10)[-1] if len(all_attention) > 10 else 1
 for login, e in E.items():
-    e["high_attention"] = sum(1 for p in e["top_prs"] if p["a"] >= ATT_HIGH and not p["ag"])
+    e["high_attention"] = sum(1 for p in e["top_prs"] if p["a"] >= ATT_HIGH)
 
 # ---------- eligibility ----------
 elig = {l for l, e in E.items() if e["merged"] >= MIN_PRS or e["reviews_given"] >= MIN_REVIEWS}
@@ -188,9 +191,9 @@ for l in elig:
         "type_breadth": sum(1 for k, v in e["mix"].items() if v > 0 and k != "other"),
         "files_touched": len(files),
         "merged": e["merged"],
-        "agent_prs": e["agent"],
-        "agent_share": e["agent"] / max(e["merged"], 1),
-        "human_prs": e["merged"] - e["agent"],
+        "ai_approved_prs": e["agent"],
+        "ai_approved_share": e["agent"] / max(e["merged"], 1),
+        "fully_reviewed_prs": e["merged"] - e["agent"],
         "reviews_given": e["reviews_given"],
     }
 
@@ -233,7 +236,7 @@ out = {
         "weights": WEIGHTS, "attention_high_threshold": round(ATT_HIGH, 2),
         "eligibility": f"merged>={MIN_PRS} or reviews>={MIN_REVIEWS}",
         "core_file_min_authors": CORE_FILE_MIN_AUTHORS, "attention_cap": ATT_CAP,
-        "agent_labelled_prs": sum(1 for p in prs if AGENT_LABELS & {l["name"] for l in p["labels"]["nodes"]}),
+        "ai_approved_prs": sum(1 for p in prs if AI_APPROVAL_LABEL in {l["name"] for l in p["labels"]["nodes"]}),
     },
     "engineers": engineers[:150],
 }
@@ -245,5 +248,5 @@ print("\nTOP 10:")
 for e in engineers[:10]:
     print(f"  {e['score']:5.1f}  {e['login']:22s} L{e['pillars']['leverage']:5.1f} "
           f"B{e['pillars']['blast']:5.1f} S{e['pillars']['shipping']:5.1f} W{e['pillars']['workmix']:5.1f} "
-          f"| {e['raw']['merged']}pr ({e['raw']['agent_prs']} agent) {e['raw']['reviews_given']}rev {e['raw']['distinct_helped']}helped")
+          f"| {e['raw']['merged']}pr ({e['raw']['ai_approved_prs']} ai-appr) {e['raw']['reviews_given']}rev {e['raw']['distinct_helped']}helped")
 print(f"\ndata.json bytes={os.path.getsize(os.path.join(ROOT,'data.json'))}")
