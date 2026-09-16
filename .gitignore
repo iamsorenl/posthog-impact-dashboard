@@ -7,3 +7,6 @@ probe*.json
 probe*.err
 .netlify/
 public/
+
+# conversation export - submission artifact, not repo content
+*-i-would-like-you-to-read-engineering-take-home.txt
