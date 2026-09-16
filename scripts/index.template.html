@@ -24,6 +24,12 @@ padding:8px 11px;margin:0 0 9px;font-size:11.5px;color:#e8d5c4;line-height:1.5}
 .ag{display:inline-block;background:#3a2a1a;color:#ffb380;border-radius:3px;padding:0 4px;font-size:9.5px;
 margin-left:4px;vertical-align:middle;font-weight:600}
 .agbar{font-size:10px;color:var(--dim);margin-top:5px}
+.cant{background:#12161f;border:1px solid var(--line);border-left:3px solid #4a5568;border-radius:7px;
+padding:7px 11px;margin-bottom:10px;font-size:10.5px;color:var(--dim);display:flex;flex-wrap:wrap;
+gap:3px 15px;align-items:baseline;line-height:1.45}
+.cant>b{color:var(--tx);font-size:11px}
+.cant span b{color:#b8c2d0;font-weight:600}
+.cant s{color:#4a5568;text-decoration:none;margin-right:4px}
 /* top 5 */
 .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-bottom:12px}
 .c{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px;cursor:pointer;
@@ -88,7 +94,7 @@ dialog code{background:#0a0d13;padding:1px 4px;border-radius:3px;font-size:11px}
 </style></head><body>
 <script type="application/json" id="D">__DATA__</script>
 <header>
-  <h1>Who is having the most impact at PostHog?</h1>
+  <h1>Five engineers whose fingerprints are all over the last 90 days</h1>
   <div class="sub" id="meta"></div>
   <button class="btn" onclick="document.getElementById('m').showModal()">How this is calculated</button>
 </header>
@@ -101,9 +107,15 @@ It is four things a leader actually cares about: <b style="color:var(--lev)">how
 <b style="color:var(--bla)">whether your work lands on surfaces others depend on</b>,
 <b style="color:var(--shi)">whether what you ship draws real scrutiny</b>, and
 <b style="color:var(--wor)">whether you carry the unglamorous fix/perf load</b>.
-Each score is a cohort percentile that opens into the PRs behind it &mdash; this is <b>evidence to check, not a verdict</b>.
-<a href="#" onclick="document.getElementById('m').showModal();return false">What it cannot see &rarr;</a></p>
+Each score is a cohort percentile that opens into the named PRs behind it. This is <b>evidence to check, not a verdict to accept</b> &mdash; click any engineer and go falsify it.</p>
 <div class="cards" id="cards"></div>
+<div class="cant"><b>What this cannot see &mdash; read before trusting the ranking.</b>
+<span><s>&#9679;</s><b>Glue work.</b> RFCs, design review, mentoring, unblocking in Slack: no PRs, no score.</span>
+<span><s>&#9679;</s><b>Support rotation.</b> A week on support hero produces near-zero PRs and real customer impact.</span>
+<span><s>&#9679;</s><b>Long-cycle work.</b> Eight weeks on a query-planner rewrite lands as one PR and scores at the floor.</span>
+<span><s>&#9679;</s><b>Greenfield penalty.</b> Blast radius rewards crowded files, so anyone alone in a new product area scores low by construction.</span>
+<span><s>&#9679;</s><b>Individual ranking is contested.</b> SPACE and DORA scope deliberately to teams, not people.
+<a href="#" onclick="document.getElementById('m').showModal();return false">Full methodology &amp; limits &rarr;</a></span></div>
 <div class="det" id="det"></div>
 <div class="lb">
   <div class="lbh"><div class="sec" style="margin:0">All eligible contributors</div>
